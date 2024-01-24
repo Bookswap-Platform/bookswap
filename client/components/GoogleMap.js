@@ -11,7 +11,7 @@ import Book from '../assets/images/Book.png';
 function GoogleMap({bookAddress, handleRequestBook, reqUsername }) {
   const [position, setPosition] = useState({ lat: 34.0522, lng: -118.2437 });
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
-  const apiKey = "AIzaSyD1k8KSUycExJ5a5qfnlRg1XIgRVKcD6Ao";
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
     if (bookAddress && bookAddress.address) {
