@@ -11,6 +11,7 @@ const SignUp = () => {
         username: '',
         password: '',
         name: '',
+        lastName: '',
         address: '',
         instructions: '',
         // zipcode: '',
@@ -81,6 +82,7 @@ const SignUp = () => {
         e.preventDefault();
         const data = {
             name: userData.name,
+            lastName: userData.lastName,
             address: userData.address,
             username: userData.username,
             password: userData.password,
@@ -108,20 +110,36 @@ const SignUp = () => {
 
             <h3>Sign up</h3>
             <form onSubmit={handleSubmit}>
-                <div>Name</div>
-                <div><input
-                    name="name"
-                    type="text"
-                    value={userData.name}
-                    onChange={handleUserDataChange} /></div>
+                <div>First Name</div>
+                <div>
+                    <input
+                        name="name"
+                        type="text"
+                        value={userData.name}
+                        onChange={handleUserDataChange} 
+                    />
+                </div>
+
+                <div>Last Name</div>
+                <div>
+                    <input
+                        name="lastName"
+                        type="text"
+                        value={userData.lastName}
+                        onChange={handleUserDataChange} 
+                    />
+                </div>
 
                 <div>Address</div>
-                <div><input
-                    id="address-input"
-                    name="address"
-                    type="text"
-                    value={userData.address}
-                    onChange={handleUserDataChange} /></div>
+                <div>
+                    <input
+                        id="address-input"
+                        name="address"
+                        type="text"
+                        value={userData.address}
+                        onChange={handleUserDataChange} 
+                    />
+                </div>
 
                 {/* <div>ZIP Code</div>
                 <div><input
@@ -131,39 +149,51 @@ const SignUp = () => {
                     onChange={handleUserDataChange} /></div> */}
 
                 <div>Pick up instructions (Optional)</div>
-                <div><input
-                    name="instructions"
-                    type="text"
-                    placeholder="e.g. pick up from doorman, or contact me at email / phone"
-                    value={userData.instructions}
-                    onChange={handleUserDataChange}
-                /></div>
+                <div>
+                    <input
+                        name="instructions"
+                        type="text"
+                        placeholder="e.g. pick up from doorman, or contact me at email / phone"
+                        value={userData.instructions}
+                        onChange={handleUserDataChange}
+                    />
+                </div>
 
                 <div>Username</div>
-                <div><input
-                    name="username"
-                    type="text"
-                    value={userData.username}
-                    onChange={handleUserDataChange}
-                /></div>
+                <div>
+                    <input
+                        name="username"
+                        type="text"
+                        value={userData.username}
+                        onChange={handleUserDataChange}
+                    />
+                </div>
 
                 <div>Password</div>
-                <div><input
-                    name="password"
-                    type="password"
-                    value={userData.password}
-                    onChange={handleUserDataChange} /></div>
+                <div>
+                    <input
+                        name="password"
+                        type="password"
+                        value={userData.password}
+                        onChange={handleUserDataChange} 
+                    />
+                </div>
 
                 <button type="submit"
                     disabled={
                         !availability ||
                         !userData.name ||
+                        !userData.lastName ||
                         !userData.address ||
                         // !userData.zipcode ||
                         !userData.username ||
                         !userData.password
-                    }>Create user</button>
+                }>
+                    Create user        
+                </button>
+
             </form>
+
             {availability ?
                 <div class="warning" style={{ color: "#85BAA1", fontSize: "0.8em" }}>Username is available </div> :
                 <div class="warning" style={{ color: "#A41409", fontSize: "0.8em" }}>Username is not available</div>

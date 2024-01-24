@@ -6,7 +6,7 @@ const userController = {};
 userController.createUser = (req, res, next) => {
   console.log('userController createUser running');
   console.log('request body ', req.body);
-  const { username, password, name, address } = req.body;
+  const { username, password, name, lastName, address } = req.body;
 
   //Checks if any input fields are missing
   if (!username || !name || !password || !address) {
@@ -17,6 +17,7 @@ userController.createUser = (req, res, next) => {
     username,
     password,
     name,
+    lastName,
     address,
   })
     .then((data) => {

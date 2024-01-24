@@ -54,7 +54,12 @@ const Login = () => {
                 >Sign in</button></div>
             </form>
             {!correctCredential && <div className="warning">Incorrect username or password.</div>}
-            <div>Not a user yet? <a href="signup">Sign up</a></div>
+            <div>Not a user yet? 
+                
+                
+                
+                
+                <a href="signup">Sign up</a></div>
         </div>
     )
 }
