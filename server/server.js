@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
+
 // parses JSON from incoming request
 app.use(express.json());
 app.use(cookieParser());
