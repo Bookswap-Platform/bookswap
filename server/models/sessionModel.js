@@ -6,4 +6,9 @@ const sessionSchema = new Schema({
     createdAt: { type: Date, expires: 1800, default: Date.now }
 });
 
+// const sessionSchema = new Schema({
+//     cookieId: { type: String, required: true, unique: true },
+//     createdAt: { type: Date, expires: 1800, default: Date.now }
+// });
+
 module.exports = mongoose.model('Session', sessionSchema);

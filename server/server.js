@@ -3,8 +3,11 @@ const path = require('path');
 const PORT = 3000;
 const app = express();
 const cookieParser = require('cookie-parser');
+// adding JWT 
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+const tokenSecret = process.env.TOKEN_SECRET;
 
 
 // parses JSON from incoming request
