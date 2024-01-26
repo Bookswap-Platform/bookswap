@@ -23,6 +23,7 @@
     "express-session": "^1.17.3",
     "file-loader": "^6.2.0",
     "gapi-script": "^1.2.0",
+    "google-auth-library": "^9.5.0",
     "jwt-decode": "^4.0.0",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.4",

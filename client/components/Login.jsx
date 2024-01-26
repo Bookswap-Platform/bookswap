@@ -9,8 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
-  const clientID =
-    "221084162073-vh1l5edb49ijoq9h3nc1q5o7rju2p2tq.apps.googleusercontent.com";
+  const clientID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
 
   const userLogin = async (credentials) => {
     // fetch call to validate user
@@ -53,13 +52,31 @@ const Login = () => {
       .catch((err) => console.log("App: log in error:", err));
   };
 
-  const onSuccess = (res) => {
-    console.log("Login Success! current user: ", res.username);
+  const onSuccess = async (res) =>  {
+    // console.log("Login Success! Response: ", res);
+    await fetch("/action/oAuth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(res),
+    })
+      // .then((res) => res.json())
+      // .then((bool) => {
+      //   setCorrectCredential(bool);
+      //   if (bool) {
+      //     navigate("/home");
+      //   }
+      // })
+      .catch((err) => console.log("App: log in error:", err));
+    
   }
 
   const onFailure = (res) => {
     console.log("Login Fails. res: ", res);
   }
+
+
 
   return (
     <div className="form-container">

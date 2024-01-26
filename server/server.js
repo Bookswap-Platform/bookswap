@@ -64,6 +64,20 @@ app.post(
   }
 );
 
+app.post(
+  '/action/oAuth',
+    userController.verifyOAuth,
+  // userController.verifyUser,
+  // cookieController.setSSIDCookie,
+  // sessionController.startSession,
+  (req, res) => {
+    console.log(
+      'Google OAuth token verified. Res: ', res
+    );
+    res.status(200).json('OAuth Verified!')
+  }
+);
+
 //Protect server side requests to protected pages
 app.get('/home', sessionController.isLoggedIn, (req, res) => {
   res.status(200).json(res.locals.user);
