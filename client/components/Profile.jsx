@@ -37,6 +37,11 @@ const Profile = () => {
 
   const handleAddressInput = (e) => {
     setValue(e.target.value);
+    // setUserData.address(e.target.value);
+    setUserData({
+      ...userData,
+      address: e.target.value,
+    });
   };
 
   const handleAddressSelect =
@@ -167,7 +172,7 @@ const Profile = () => {
             <input
               id="address-input"
               name="address"
-              value={value}
+              value={userData.address}
               onChange={handleAddressInput}
               disabled={!ready}
             />
