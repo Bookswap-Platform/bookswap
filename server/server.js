@@ -19,6 +19,8 @@ const libraryRouter = require('./routes/library');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
 const sessionController = require('./controllers/sessionController');
+const jwtController = require('./controllers/jwtController');
+
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
@@ -28,7 +30,9 @@ app.get('/', (req, res) => {
 app.post(
   '/action/signup',
   userController.createUser,
-  cookieController.setSSIDCookie,
+  // commented out cookie controller to try to switch to jwt VVV
+  // cookieController.setSSIDCookie,
+  jwtController.generateToken,
   sessionController.startSession,
   (req, res) => {
     res.status(200).json(true);
@@ -50,7 +54,8 @@ app.get('/action/check/:username', userController.checkUser, (req, res) => {
 app.post(
   '/action/login',
   userController.verifyUser,
-  cookieController.setSSIDCookie,
+  // cookieController.setSSIDCookie,
+  authenticateToken.authenticateToken,
   sessionController.startSession,
   (req, res) => {
     console.log(
