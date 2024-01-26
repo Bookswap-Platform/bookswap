@@ -72,9 +72,9 @@ app.post(
   // sessionController.startSession,
   (req, res) => {
     console.log(
-      'Google OAuth token verified. Res: ', res
+      'Google OAuth token verified. userData: ', res.locals.userData
     );
-    res.status(200).json('OAuth Verified!')
+    res.status(200).json(res.locals.userData);
   }
 );
 

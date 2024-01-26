@@ -61,19 +61,19 @@ userController.checkUser = (req, res, next) => {
 
 userController.verifyOAuth = async function (req, res, next) {
   console.log('userController verifyOAuth is running');
-  console.log('req.body: ', req.body);
   try {
     const ticket = await client.verifyIdToken({
         idToken: req.body.credential,
         audience: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID
     });
     const payload = await ticket.getPayload();
-    const userid = payload['sub']
-    const name = payload.name
-    const lastName = payload.lastName
-    const email = payload.email
-    console.log(`Verified user data: ${name, lastName, email, userid}`)
-    console.log('userid: ', userid)
+    const userid = payload.sub;
+    const name = payload.given_name;
+    const lastName = payload.family_name;
+    const email = payload.email;
+    const userData = {name, lastName, email, userid};
+    res.locals.userData = userData;
+    return next();
   } catch (err) {
     console.log(err.message)
   };
