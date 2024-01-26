@@ -18,7 +18,7 @@ function HomeNavBar() {
   });
 
   return (
-    <nav className='home-navbar'>
+    <nav className='flex flex-row justify-between items-center px-20 border-b-1 border-solid border-gray-500'>
 
       <Link to='/home'>
         <img
