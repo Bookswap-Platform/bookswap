@@ -37,17 +37,16 @@ const Profile = () => {
 
   const handleAddressInput = (e) => {
     setValue(e.target.value);
-    // setUserData.address(e.target.value);
-    setUserData({
-      ...userData,
-      address: e.target.value,
-    });
   };
 
   const handleAddressSelect =
     ({ description }) =>
     () => {
       setValue(description, false);
+      setUserData({
+        ...userData,
+        address: description,
+      });
       clearSuggestions();
 
       // get latitude and longitude via utility functions
@@ -172,7 +171,7 @@ const Profile = () => {
             <input
               id="address-input"
               name="address"
-              value={userData.address}
+              value={value}
               onChange={handleAddressInput}
               disabled={!ready}
             />
