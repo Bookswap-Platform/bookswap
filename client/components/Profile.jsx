@@ -16,7 +16,6 @@ const Profile = () => {
     instructions: "",
   });
   const [success, setSuccess] = useState(undefined);
-  const [isGoogleMapsLoaded, setIsGoogleMapsLoaded] = useState(false);
 
   const {
     ready,
@@ -93,6 +92,7 @@ const Profile = () => {
       address: userData.address,
       instructions: userData.instructions,
     };
+
     fetch("/action/updateUser", {
       method: "POST",
       headers: {
@@ -113,6 +113,16 @@ const Profile = () => {
       })
       .catch((err) => console.log("App: update user error ", err));
   };
+
+  useEffect(() => {
+    fetch("/action/getUser")
+      .then((data) => data.json())
+      .then((data) => {
+        setUserData(data);
+      })
+      .catch((err) => console.log("App error getting user: ", err));
+  }, [])
+
 
   const warning = () => {
     if (success) {
