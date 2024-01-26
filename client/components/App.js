@@ -9,7 +9,7 @@ import ProtectedRoute from './ProtectedRoute.jsx';
 import Notifications from './SwapComponents/Notifications.jsx';
 import Profile from './Profile.jsx';
 import Requests from './SwapComponents/Requests.jsx';
-
+import '../styles.css'
 
 function App() {
   return (

@@ -19,6 +19,7 @@ function HomeNavBar() {
 
   return (
     <nav className='home-navbar'>
+
       <Link to='/home'>
         <img
           src={BookSwapLogo}
