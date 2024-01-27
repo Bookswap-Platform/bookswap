@@ -27,21 +27,27 @@ function HomeNavBar() {
           className='bookswap-logo'
         />
       </Link>
+
       <Link to='/myLibrary'>
         <h2>My Library</h2>
       </Link>
+
       <Link to='/requests'>
         <h2>Requests</h2>
       </Link>
+
       <Link to='/notifications'>
         <h2>Notifications ({unread} unread)</h2>
       </Link>
+
       <Link to='/profile'>
         <h2>Profile</h2>
       </Link>
+
       <h2>
         <a href='/action/logout'>Log out</a>
       </h2>
+      
     </nav>
   );
 }
