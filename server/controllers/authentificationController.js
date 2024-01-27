@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 const authentificationController = {};
 
 authentificationController.authenticateToken = (req, res, next) => {
+  console.log('inside authentification controller');
   // Retrieve the token from the 'ssid' cookie
-  const token = req.cookies.ssid;
+  const token = res.locals.token;
 
   // If no token is present, return a 401 Unauthorized status
   if (token == null) {
@@ -16,12 +17,7 @@ authentificationController.authenticateToken = (req, res, next) => {
   // Verify the token using the provided secret key
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     // Log any error encountered during token verification
-    console.log(err);
-
-    // If there's an error in token verification, return a 403 Forbidden status
-    if (err) {
-      return res.sendStatus(403);
-    }
+    console.log('error inside jwt.verify');
 
     // If the token is successfully verified, attach the user information to the request object
     req.user = user;
@@ -30,3 +26,5 @@ authentificationController.authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+module.exports = authentificationController;

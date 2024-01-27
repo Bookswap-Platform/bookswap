@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const jwtController = {};
 
 jwtController.generateToken = (req, res, next) => {
+
 // function to create the jwt token
   function generateAccessToken(username) {
     return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });

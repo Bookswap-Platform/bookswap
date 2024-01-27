@@ -31,8 +31,8 @@ sessionController.isLoggedIn = (req, res, next) => {
 
 sessionController.startSession = (req, res, next) => {
     console.log('session controller start session running');
-    console.log('cookieID is ', req.cookies.ssid)
-    console.log('jwt is ', res.locals.token);
+    // console.log('Once jwt now cookieID is ', res.cookie.ssid)
+    console.log('in sessionController.startSession jwt is ', res.locals.token);
     Session.findOne({ cookieId: res.locals.userID })
         .then(session => {
             if (!session) {

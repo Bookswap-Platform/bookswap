@@ -56,9 +56,12 @@ app.get('/action/check/:username', userController.checkUser, (req, res) => {
 app.post(
   '/action/login',
   userController.verifyUser,
-  // cookieController.setSSIDCookie,
+  // adding this to try to create working jwt middleware
+  cookieController.setSSIDCookie,
+  jwtController.generateToken,
   authentificationController.authenticateToken,
-  sessionController.startSession,
+    // commented out session controller to try to get authentificationController.authenticateToken to work
+  // sessionController.startSession,
   (req, res) => {
     console.log(
       'authentication completed, correctUser is ',
@@ -75,8 +78,9 @@ app.post(
 );
 
 app.post(
-  '/action/oAuth',
-    userController.verifyOAuth,
+  '/action/oAuth',  //commented out this one
+  // authentificationController.authenticateToken,
+    userController.verifyOAuth, //commented out this one
   // userController.verifyUser,
   // cookieController.setSSIDCookie,
   // sessionController.startSession,
