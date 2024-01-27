@@ -8,10 +8,10 @@ const client = new OAuth2Client();
 userController.createUser = (req, res, next) => {
   console.log('userController createUser running');
   console.log('request body ', req.body);
-  const { username, password, name, address } = req.body;
+  const { username, password, name, lastName, address, email, instructions } = req.body;
 
   //Checks if any input fields are missing
-  if (!username || !name || !password || !address) {
+  if (!username || !name || !lastName|| !password || !email|| !address) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
@@ -19,7 +19,10 @@ userController.createUser = (req, res, next) => {
     username,
     password,
     name,
+    lastName,
+    email,
     address,
+    instructions
   })
     .then((data) => {
       res.locals.user = data;
@@ -112,17 +115,19 @@ userController.verifyUser = (req, res, next) => {
 
 userController.updateUserProfile = async (req, res, next) => {
   console.log('update user profile running');
-  const { name, address, instructions } = req.body;
+  const { name, lastName, email, address, instructions } = req.body;
   console.log(
-    'name, address and instructions are ',
-    name,
-    address,
+    'name, email, address and instructions are ',
+    name, 
+    lastName, 
+    email, 
+    address, 
     instructions
   );
   try {
     const updatedUser = await User.findOneAndUpdate(
       { username: res.locals.user.username },
-      { name, address, instructions },
+      { name, lastName, email, address, instructions },
       { new: true }
     );
     res.locals.user = updatedUser;

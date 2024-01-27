@@ -12,6 +12,8 @@ import HomeNavBar from "./HomeNavBar";
 const Profile = () => {
   const [userData, setUserData] = useState({
     name: "",
+    latName: "",
+    email: "",
     address: "",
     instructions: "",
   });
@@ -93,6 +95,8 @@ const Profile = () => {
     e.preventDefault();
     const data = {
       name: userData.name,
+      lastName: userData.lastName,
+      email: userData.email,
       address: userData.address,
       instructions: userData.instructions,
     };
@@ -162,6 +166,26 @@ const Profile = () => {
               name="name"
               type="text"
               placeholder={userData.name}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div>Last Name</div>
+          <div>
+            <input
+              name="lastName"
+              type="text"
+              placeholder={userData.lastName}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div>Email</div>
+          <div>
+            <input
+              name="email"
+              type="email"
+              placeholder={userData.email}
               onChange={handleUserDataChange}
             />
           </div>

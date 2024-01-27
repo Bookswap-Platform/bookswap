@@ -34,7 +34,7 @@ const Login = () => {
           props.setUser(username);
         }
       })
-      .catch((err) => console.log("Google Authorization fails."));
+      .catch((err) => console.log("Login fails."));
 
     fetch("/action/login", {
       method: "POST",
