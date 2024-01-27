@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .home-navbar {
   display: flex;
   flex-direction: row;
@@ -36,8 +37,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 20px;
-  margin-top: 50px;
+  /* padding: 20px;
+  margin-top: 50px; */
 }
 
 .search-container {
@@ -72,6 +73,11 @@ input {
   height: 25px;
 }
 
+input:focus {
+  background-color: #fff;
+  outline: transparent;
+}
+
 .modal-close-button {
   margin-top: 10px;
   cursor: pointer;
@@ -85,14 +91,14 @@ button {
   border-radius: 5px;
   width: 365px;
   height: 40px;
-  background-color: rgb(92, 43, 226);
+  background-color: #333D2E;
   color: white;
   font-weight: bold;
   font-size: 12pt;
 }
 
 button:hover {
-  background-color: rgb(123, 87, 223);
+  background-color: #5f6d59;
 }
 
 button:disabled {
@@ -122,11 +128,11 @@ button.transparent:hover {
 a {
   font-weight: bold;
   text-decoration: none;
-  color: rgb(92, 43, 226);
+  color: #333D2E;
 }
 
 a:hover {
-  color: rgb(123, 87, 223);
+  color: #434f3e;
 }
 
 .form-container {

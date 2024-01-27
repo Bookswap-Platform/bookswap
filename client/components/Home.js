@@ -5,7 +5,7 @@ import GoogleMap from './GoogleMap';
 
 function Home() {
   return (
-    <div>
+    <div className='home flex items-center flex-col justify-start bg-parchmentDark'>
       <HomeNavBar />
       <HomeSearchBar />
     </div>

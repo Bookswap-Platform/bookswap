@@ -13,7 +13,7 @@ import '../styles.css'
 
 function App() {
   return (
-    <div>
+    <div className="min-h-dvh bg-parchmentDark text-slate APP">
       <Routes>
         <Route path='/home' element={
           <ProtectedRoute>
