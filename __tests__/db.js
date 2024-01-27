@@ -1,0 +1,1 @@
+/*Testing the middleware functions for the sign up route */
