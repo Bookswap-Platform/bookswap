@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs');
+const {OAuth2Client} = require('google-auth-library');
 const { User, Notification, Book } = require('../models/models');
 
 const userController = {};
+const client = new OAuth2Client();
 
 userController.createUser = (req, res, next) => {
   console.log('userController createUser running');
@@ -57,6 +59,26 @@ userController.checkUser = (req, res, next) => {
     return next();
   });
 };
+
+userController.verifyOAuth = async function (req, res, next) {
+  console.log('userController verifyOAuth is running');
+  try {
+    const ticket = await client.verifyIdToken({
+        idToken: req.body.credential,
+        audience: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID
+    });
+    const payload = await ticket.getPayload();
+    const userid = payload.sub;
+    const name = payload.given_name;
+    const lastName = payload.family_name;
+    const email = payload.email;
+    const userData = {name, lastName, email, userid};
+    res.locals.userData = userData;
+    return next();
+  } catch (err) {
+    console.log(err.message)
+  };
+}
 
 userController.verifyUser = (req, res, next) => {
   console.log('verifyUser running. Req.body is ', req.body);
