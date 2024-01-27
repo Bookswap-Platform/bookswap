@@ -42,7 +42,8 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   name: { type: String, required: true },
   lastName: { type: String, required: true },
-  address: { type: String, required: false },
+  email: { type: String, required: true },
+  address: { type: String, required: true },
   // zipcode: { type: Number, required: false },
   books: [{
     // book: { type: Schema.Types.ObjectId, ref: 'book' },

@@ -12,6 +12,7 @@ const SignUp = () => {
         password: '',
         name: '',
         lastName: '',
+        email: '',
         address: '',
         instructions: '',
         // zipcode: '',
@@ -84,6 +85,7 @@ const SignUp = () => {
             name: userData.name,
             lastName: userData.lastName,
             address: userData.address,
+            email: userData.email,
             username: userData.username,
             password: userData.password,
             instructions: userData.instructions
@@ -126,6 +128,16 @@ const SignUp = () => {
                         name="lastName"
                         type="text"
                         value={userData.lastName}
+                        onChange={handleUserDataChange} 
+                    />
+                </div>
+
+                <div>Email</div>
+                <div>
+                    <input
+                        name="email"
+                        type="email"
+                        value={userData.email}
                         onChange={handleUserDataChange} 
                     />
                 </div>
@@ -184,6 +196,7 @@ const SignUp = () => {
                         !availability ||
                         !userData.name ||
                         !userData.lastName ||
+                        !userData.email ||
                         !userData.address ||
                         // !userData.zipcode ||
                         !userData.username ||
