@@ -161,7 +161,7 @@ const Profile = () => {
             <input
               name="name"
               type="text"
-              value={userData.name}
+              placeholder={userData.name}
               onChange={handleUserDataChange}
             />
           </div>
@@ -172,6 +172,7 @@ const Profile = () => {
               id="address-input"
               name="address"
               value={value}
+              placeholder={userData.address}
               onChange={handleAddressInput}
               disabled={!ready}
             />
@@ -183,8 +184,7 @@ const Profile = () => {
             <input
               name="instructions"
               type="text"
-              placeholder="e.g. pick up from doorman, or contact me at email / phone"
-              value={userData.instructions}
+              placeholder={userData.instructions}
               onChange={handleUserDataChange}
             />
           </div>
