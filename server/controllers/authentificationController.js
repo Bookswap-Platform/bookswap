@@ -1,8 +1,10 @@
 // authentificationController
-
 const jwt = require('jsonwebtoken');
 
-authenticateToken.authenticateToken(req, res, next) {
+// Declare authentificationController object
+const authentificationController = {};
+
+authentificationController.authenticateToken = (req, res, next) => {
   // Retrieve the token from the 'ssid' cookie
   const token = req.cookies.ssid;
 
@@ -27,6 +29,4 @@ authenticateToken.authenticateToken(req, res, next) {
     // Proceed to the next middleware or route handler
     next();
   });
-}
-
-module.exports = authenticateToken;
+};

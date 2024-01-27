@@ -20,7 +20,9 @@ const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
 const sessionController = require('./controllers/sessionController');
 const jwtController = require('./controllers/jwtController');
+const authentificationController = require('./controllers/authentificationController');
 
+// authentificationController.authenticateToken
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
@@ -55,7 +57,7 @@ app.post(
   '/action/login',
   userController.verifyUser,
   // cookieController.setSSIDCookie,
-  authenticateToken.authenticateToken,
+  authentificationController.authenticateToken,
   sessionController.startSession,
   (req, res) => {
     console.log(
