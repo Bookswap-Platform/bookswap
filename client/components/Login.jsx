@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-// import BookSwapLogo from "../assets/images/BookSwap.png";
-import BookSwapLogo from "../assets/images/BookSwap_02.png";
+import BookSwapLogo from "../assets/images/BookSwap.png";
 
 const Login = () => {
   const [correctCredential, setCorrectCredential] = useState(true);
@@ -77,16 +76,15 @@ const Login = () => {
     console.log("Login Fails. res: ", res);
   }
 
-const inputClasses = 'rounded border-0 border-b-4 w-full h-12 bg-parchment'
+
 
   return (
-    <div className="form-container bg-parchment">
+    <div className="form-container">
       <img src={BookSwapLogo} className="bookswap-logo" />
       <h3>Sign in to your account</h3>
       <form onSubmit={handleSubmit}>
         <div>Username</div>
         <input
-          className={inputClasses}
           name="username"
           type="text"
           value={username}
@@ -95,7 +93,6 @@ const inputClasses = 'rounded border-0 border-b-4 w-full h-12 bg-parchment'
 
         <div>Password</div>
         <input
-          className={inputClasses}
           name="password"
           type="password"
           value={password}
@@ -105,7 +102,7 @@ const inputClasses = 'rounded border-0 border-b-4 w-full h-12 bg-parchment'
         <div>
           <button
             type="submit"
-            className="bg-darkGreen"
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Sign in
           </button>
@@ -115,7 +112,7 @@ const inputClasses = 'rounded border-0 border-b-4 w-full h-12 bg-parchment'
         <div className="warning">Incorrect username or password.</div>
       )}
       <div>
-        Not a user yet? <a href="signup" className="text-darkGreen">Sign up</a>
+        Not a user yet? <a href="signup">Sign up</a>
       </div>
       <br />
       <div id="goolgeSignin">
