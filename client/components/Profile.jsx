@@ -160,7 +160,7 @@ const Profile = () => {
       <div className="form-container">
         <h3>Update your profile</h3>
         <form onSubmit={handleSubmit}>
-          <div>Name</div>
+          <div>First Name</div>
           <div>
             <input
               name="name"
