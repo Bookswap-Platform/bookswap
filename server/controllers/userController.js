@@ -40,7 +40,7 @@ userController.createUser = (req, res, next) => {
       return next({
         log: 'Create User Error',
         status: 400,
-        message: { err: 'Create User Error' },
+        message: { err: 'Create User Error', err },
       });
     });
 };
