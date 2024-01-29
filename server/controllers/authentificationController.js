@@ -17,8 +17,7 @@ authentificationController.authenticateToken = (req, res, next) => {
   // Verify the token using the provided secret key
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     // Log any error encountered during token verification
-    console.log('error inside jwt.verify');
-
+      console.log('inside jwt verify. The token is: ', token),
     // If the token is successfully verified, attach the user information to the request object
     req.user = user;
 

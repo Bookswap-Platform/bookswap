@@ -61,7 +61,7 @@ app.post(
   jwtController.generateToken,
   authentificationController.authenticateToken,
     // commented out session controller to try to get authentificationController.authenticateToken to work
-  // sessionController.startSession,
+  sessionController.startSession,
   (req, res) => {
     console.log(
       'authentication completed, correctUser is ',

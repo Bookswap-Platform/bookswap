@@ -5,6 +5,11 @@ const sessionController = {};
 
 sessionController.isLoggedIn = (req, res, next) => {
     console.log('checking if logged in session exists')
+    console.log('look here', req.cookies.newToken)
+    // ssid isnt jwt string. Is that needed
+
+// left off updating the cookieId: req.cookies.ssid to get a confirmed session. submit help desk
+
     Session.findOne({ cookieId: req.cookies.ssid })
         .then(session => {
             if (session === null) {
@@ -31,13 +36,13 @@ sessionController.isLoggedIn = (req, res, next) => {
 
 sessionController.startSession = (req, res, next) => {
     console.log('session controller start session running');
-    // console.log('Once jwt now cookieID is ', res.cookie.ssid)
-    console.log('in sessionController.startSession jwt is ', res.locals.token);
-    Session.findOne({ cookieId: res.locals.userID })
+    // console.log('Once jwt now cookieID is ', res.locals)
+    console.log('in sessionController.startSession jwt token is ', res.locals.token);
+    Session.findOne({ cookieId: res.locals.token })
         .then(session => {
             if (!session) {
                 console.log('creating new session and continuing login')
-                Session.create({ cookieId: res.locals.userID })
+                Session.create({ cookieId: res.locals.token })
                     .then((sesh) => {
                         console.log('new session is ', sesh)
                         next()

@@ -12,7 +12,7 @@ jwtController.generateToken = (req, res, next) => {
   const token = generateAccessToken({ username: req.body.username });
   res.locals.token = token;
   // send token as a cookie and added secure: true
-  res.cookie('ssid', res.locals.token, { httpOnly: true, secure: true });
+  res.cookie('newToken', res.locals.token, { httpOnly: true });
 
   return next();
 
