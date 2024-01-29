@@ -90,12 +90,13 @@ userController.verifyOAuth = async function (req, res, next) {
 };
 
 userController.newUserFromGoogleOauth = async (req, res, next) => {
-  const verifyNewUserfromGoogleOauth = User.findOne({
+  const verifyNewUserfromGoogleOauth = await User.findOne({
     email: res.locals.user.email,
   });
+  console.log(">>> the user id from the email search in db: ", verifyNewUserfromGoogleOauth._id);
 
-  if (verifyNewUserfromGoogleOauth && verifyNewUserfromGoogleOauth.userID) {
-    res.locals.userID = verifyNewUserfromGoogleOauth.userID;
+  if (verifyNewUserfromGoogleOauth._id) {
+    res.locals.userID = verifyNewUserfromGoogleOauth._id.toString();
     console.log(">>> check the userID from the database: ", res.locals.userID);
     res.locals.correctUser = true;
     return next();
