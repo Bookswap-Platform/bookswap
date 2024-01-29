@@ -53,7 +53,7 @@ const Login = () => {
   };
 
   const onSuccess = async (res) =>  {
-    // console.log("Login Success! Response: ", res);
+    console.log("Login Success! Response: ", res);
     await fetch("/action/oAuth", {
       method: "POST",
       headers: {
@@ -61,13 +61,13 @@ const Login = () => {
       },
       body: JSON.stringify(res),
     })
-      // .then((res) => res.json())
-      // .then((bool) => {
-      //   setCorrectCredential(bool);
-      //   if (bool) {
-      //     navigate("/home");
-      //   }
-      // })
+      .then((res) => res.json())
+      .then((bool) => {
+        setCorrectCredential(bool);
+        if (bool) {
+          navigate("/Profile");
+        }
+      })
       .catch((err) => console.log("App: log in error:", err));
     
   }
