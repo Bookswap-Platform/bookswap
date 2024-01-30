@@ -5,7 +5,7 @@ const sessionController = {};
 
 sessionController.isLoggedIn = (req, res, next) => {
     console.log('checking if logged in session exists')
-    console.log('look here', req.cookies.newToken)
+    console.log('look here', {cookieId: req.cookies.cookieId})
     // ssid isnt jwt string. Is that needed
 
 // left off updating the cookieId: req.cookies.ssid to get a confirmed session. submit help desk

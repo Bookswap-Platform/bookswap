@@ -19,7 +19,8 @@ authentificationController.authenticateToken = (req, res, next) => {
     // Log any error encountered during token verification
       console.log('inside jwt verify. The token is: ', token),
     // If the token is successfully verified, attach the user information to the request object
-    req.user = user;
+    
+    req.user = user; //look into this potentially 1-29-2024
 
     // Proceed to the next middleware or route handler
     next();
