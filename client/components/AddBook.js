@@ -69,6 +69,12 @@ const AddBook = ({ updateBooks }) => {
         handleBookSelect(searchBook);
     }
 
+    const booklist = {
+      display: "flex",
+      flexDirectioin: "row",
+      overflowX: "auto",
+    };
+
     return (
       <>
         <div>
@@ -101,7 +107,7 @@ const AddBook = ({ updateBooks }) => {
                 </Modal> */}
           {isModalOpen && selectedBook.length > 0 && (
           <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <ul>
+            <ul style={booklist}>
               {selectedBook.map((book, index) => (
                 <li key={index}>
                   <img
