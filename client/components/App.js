@@ -9,11 +9,11 @@ import ProtectedRoute from './ProtectedRoute.jsx';
 import Notifications from './SwapComponents/Notifications.jsx';
 import Profile from './Profile.jsx';
 import Requests from './SwapComponents/Requests.jsx';
-
+import '../styles.css'
 
 function App() {
   return (
-    <div>
+    <div className="min-h-dvh bg-parchmentDark text-slate APP">
       <Routes>
         <Route path='/home' element={
           <ProtectedRoute>
