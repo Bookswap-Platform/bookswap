@@ -55,6 +55,7 @@ app.get('/action/check/:username', userController.checkUser, (req, res) => {
 //Login
 app.post(
   '/action/login',
+  // add a get request to verify session to check for active session
   userController.verifyUser,
   // adding this to try to create working jwt middleware
   cookieController.setSSIDCookie,

@@ -10,8 +10,9 @@ sessionController.isLoggedIn = (req, res, next) => {
 
 // left off updating the cookieId: req.cookies.ssid to get a confirmed session. submit help desk
 
-    Session.findOne({ cookieId: req.cookies.ssid })
+    Session.find({ cookieId: req.cookies.cookieId })
         .then(session => {
+            console.log('>>>>> session >>>',session)
             if (session === null) {
                 console.log('no active session found')
                 return res.status(401).json(false);
