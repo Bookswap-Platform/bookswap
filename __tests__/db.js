@@ -2,6 +2,7 @@
   const userController = require('../server/controllers/userController.js');
   const { User } = require('../server/models/models.js');
   const {OAuth2Client} = require('google-auth-library');
+  const bcrypt = require("bcryptjs");
 
 
   jest.mock('../server/models/models.js', () => ({
@@ -9,6 +10,10 @@
       create: jest.fn(), // Mocking the create method of the User model
       findOne: jest.fn(),
     },
+  }));
+
+  jest.mock('bcryptjs', () => ({
+    compare: jest.fn(),
   }));
 
   jest.mock('google-auth-library', () => ({
@@ -234,4 +239,100 @@
       expect(next).toHaveBeenCalled();
     });
 
+});
+
+describe('userController.verifyUser', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should verify user with correct username and password', async () => {
+    const req = {
+      body: {
+        username: 'testuser',
+        password: 'password',
+      },
+    };
+
+    const res = {
+      locals: {},
+    };
+
+    const next = jest.fn();
+
+    const userData = {
+      _id: 'dummyUserId',
+      username: 'testuser',
+      password: 'hashedPassword', // Assuming this is the hashed password
+    };
+
+    User.findOne.mockResolvedValueOnce(userData);
+
+    bcrypt.compare.mockImplementationOnce((password, hashedPassword, callback) => {
+      callback(null, true); // Mocking successful comparison
+    });
+
+    await userController.verifyUser(req, res, next);
+
+    expect(res.locals.user).toBe(userData);
+    expect(res.locals.userID).toBe(userData._id.toString());
+    expect(res.locals.correctUser).toBe(true);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('should handle incorrect password', async () => {
+    const req = {
+      body: {
+        username: 'testuser',
+        password: 'wrongPassword',
+      },
+    };
+
+    const res = {
+      locals: {},
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    const userData = {
+      _id: 'dummyUserId',
+      username: 'testuser',
+      password: 'hashedPassword', // Assuming this is the hashed password
+    };
+
+    User.findOne.mockResolvedValueOnce(userData);
+
+    bcrypt.compare.mockImplementationOnce((password, hashedPassword, callback) => {
+      callback(null, false); // Mocking failed comparison
+    });
+
+    await userController.verifyUser(req, res, next);
+
+    expect(res.json).toHaveBeenCalledWith(false);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('should handle username not found', async () => {
+    const req = {
+      body: {
+        username: 'nonExistingUser',
+        password: 'password',
+      },
+    };
+
+    const res = {
+      locals: {},
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    User.findOne.mockResolvedValueOnce(null);
+
+    await userController.verifyUser(req, res, next);
+
+    expect(res.json).toHaveBeenCalledWith(false);
+    expect(next).not.toHaveBeenCalled();
+  });
 });
