@@ -135,14 +135,14 @@ a:hover {
   color: #434f3e;
 }
 
-.form-container {
+/* .form-container {
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
   height: 100vh;
   margin: 0;
-}
+} */
 
 .warning {
   margin-bottom: 20px;
