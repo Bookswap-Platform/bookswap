@@ -1,0 +1,53 @@
+// authentificationController
+const jwt = require('jsonwebtoken');
+
+// // Declare authentificationController object
+// const authentificationController = {};
+
+// authentificationController.authenticateToken = (req, res, next) => {
+//   console.log('inside authentification controller');
+//   // Retrieve the token from the 'ssid' cookie
+//   const token = res.locals.token;
+
+//   // If no token is present, return a 401 Unauthorized status
+//   if (token == null) {
+//     return res.sendStatus(401);
+//   }
+
+//   // Verify the token using the provided secret key
+//   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+//     // Log any error encountered during token verification
+//       console.log('inside jwt verify. The token is: ', token),
+//     // If the token is successfully verified, attach the user information to the request object
+    
+//     req.user = user; //look into this potentially 1-29-2024
+
+//     // Proceed to the next middleware or route handler
+//     next();
+//   });
+// };
+// _________________________________________Updated code below
+// Declare authentificationController object
+const authentificationController = {};
+
+authentificationController.authenticateToken = (req, res, next) => {
+  console.log('inside authentification controller');
+  // look for cookie
+
+//  if cookie doesn't exist, then create one
+  if (jwtCookie == null) {
+      // Verify the token using the provided secret key
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    // Log any error encountered during token verification
+      console.log('inside jwt verify. The token is: ', token),
+    // If the token is successfully verified, attach the user information to the request object
+
+      next();
+    });
+  }
+
+// otherwise they're okay to proceed
+
+};
+
+module.exports = authentificationController;

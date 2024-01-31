@@ -16,6 +16,21 @@ const libraryRouter = require('./routes/library');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
 const sessionController = require('./controllers/sessionController');
+// added for JWT
+const jwtController = require('./controllers/jwtController');
+
+app.use(
+  '/action/jwtRoute',
+  jwtController.generateToken,
+  userController.authenticateToken,
+
+  (req, res) => {
+    console.log(
+      'JWT token verified. userData: ', res.locals.userData
+    );
+    res.status(200).json(res.locals.userData);
+  }
+);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
@@ -25,7 +40,7 @@ app.get('/', (req, res) => {
 app.post(
   '/action/signup',
   userController.createUser,
-  cookieController.setSSIDCookie,
+  // cookieController.setSSIDCookie,
   sessionController.startSession,
   (req, res) => {
     res.status(200).json(true);
@@ -46,17 +61,19 @@ app.get('/action/check/:username', userController.checkUser, (req, res) => {
 //Login
 app.post(
   '/action/login',
-  userController.verifyUser,
-  cookieController.setSSIDCookie,
-  sessionController.startSession,
+  // userController.verifyUser,
+  // cookieController.setSSIDCookie,
+  // sessionController.startSession,
+  jwtController.generateToken,
+  userController.authenticateToken,
   (req, res) => {
     console.log(
       'authentication completed, correctUser is ',
       res.locals.correctUser
     );
     console.log('redirecting to home');
-    res.json(res.locals.correctUser);
-    // res.status(200).redirect('/home')
+    // res.json(res.locals.correctUser); //commented this out to see if error goes away
+    res.status(200).redirect('/home')
     // }
     // else {
     //     res.json(res.locals.correctUser)

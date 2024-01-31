@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const {OAuth2Client} = require('google-auth-library');
 const { User, Notification, Book } = require('../models/models');
+const jwt = require('jsonwebtoken');
 
 const userController = {};
 const client = new OAuth2Client();
@@ -413,5 +414,49 @@ userController.clearNotifications = async (req, res, next) => {
   );
   res.locals.user = updatedUser;
 };
+
+userController.authenticateToken = (req, res, next) => {
+
+    // Get token value to the json body
+    // console.log('inide authenticateToken: req.body.token',req.body.token)
+    console.log('inide authenticateToken: res.locals.token',res.locals.token)
+    const token = res.locals.token;
+
+    // If the token is present
+    if(token){
+
+        // Verify the token using jwt.verify method
+        const decode = jwt.verify(token, process.env.TOKEN_SECRET);
+        console.log('userController.authenticateToken success')
+        //  Return response with decode data
+        res.status(201).json()
+    }else{
+
+        // Return response with error
+        res.json({
+            login: false,
+            data: 'error'
+        });
+    }
+}
+
+/*
+  console.log('userController authenticateToken is running for JWT');
+ // look for cookie
+
+//  if cookie doesn't exist, then create one
+if (jwtCookie == null) {
+  // Verify the token using the provided secret key
+jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+// Log any error encountered during token verification
+  console.log('inside jwt verify. The token is: ', token),
+// If the token is successfully verified, attach the user information to the request object
+
+  next();
+});
+}
+
+// otherwise they're okay to proceed
+*/
 
 module.exports = userController;
