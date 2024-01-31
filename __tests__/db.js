@@ -1,6 +1,8 @@
 // Assuming other imports are correctly set up
 const userController = require('../server/controllers/userController.js');
 const { User } = require('../server/models/models.js');
+const {OAuth2Client} = require('google-auth-library');
+
 
 jest.mock('../server/models/models.js', () => ({
   User: {
@@ -14,6 +16,7 @@ describe('userController.createUser', () => {
   });
 
   it('should create a new user when all required fields are provided', async () => {
+    //valid request body, has all the details 
     const req = {
       body: {
         username: 'testuser',
@@ -25,6 +28,7 @@ describe('userController.createUser', () => {
       },
     };
 
+    // response object that has res.locals, res.status, and res.json
     const res = {
       locals: {},
       status: jest.fn().mockReturnThis(),
@@ -49,8 +53,7 @@ describe('userController.createUser', () => {
     const req = {
       body: {
         // Missing some required fields
-        username: 'testuser',
-        password: 'password',
+        username: 'testuser'
       },
     };
 
@@ -70,6 +73,7 @@ describe('userController.createUser', () => {
     expect(res.locals.userID).toBeUndefined();
     expect(User.create).not.toHaveBeenCalled();
   });
+
   it('should handle error if User.create throws an error', async () => {
     const req = {
       body: {
@@ -91,15 +95,37 @@ describe('userController.createUser', () => {
     const next = jest.fn();
   
     // Mock User.create to throw an error
-    const error = new Error('Mocked create error');
-    User.create.mockRejectedValueOnce(error);
+    User.create.mockRejectedValueOnce(new Error('Mocked create error'));
   
     await userController.createUser(req, res, next);
   
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Create User Error', err: error });
-    expect(res.locals.user).toBeUndefined();
-    expect(res.locals.userID).toBeUndefined();
+    // Assert that the global error handler is invoked
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect(next.mock.calls[0][0].message).toBe('Mocked create error');
   });
   
-});
+  });
+
+  jest.mock('google-auth-library', () => ({
+    OAuth2Client: jest.fn().mockImplementation(() => ({
+      verifyIdToken: jest.fn(),
+    })),
+  }));
+
+
+  describe('userController.verifyOAuth', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it ('it should call next with the user data in res.locals once the verification is successful', async () => {
+
+
+
+
+
+
+
+    })
+  });

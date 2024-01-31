@@ -27,23 +27,13 @@ userController.createUser = (req, res, next) => {
     .then((data) => {
       res.locals.user = data;
       res.locals.userID = data._id.toString();
-      console.log(
-        'new user is ',
-        res.locals.user,
-        ' and id is ',
-        res.locals.userID
-      );
+      console.log('new user is ', res.locals.user,' and id is ',res.locals.userID);
 
       return next();
     })
-    .catch((err) => {
-      return next({
-        log: 'Create User Error',
-        status: 400,
-        message: { err: 'Create User Error', err },
-      });
-    });
+    .catch(err =>  next(err));
 };
+
 
 //Checking if username already exists during signup
 userController.checkUser = (req, res, next) => {
@@ -78,7 +68,7 @@ userController.verifyOAuth = async function (req, res, next) {
     res.locals.userData = userData;
     return next();
   } catch (err) {
-    console.log(err.message)
+    return next(err);
   };
 }
 
