@@ -95,7 +95,7 @@ userController.newUserFromGoogleOauth = async (req, res, next) => {
   });
   console.log(">>> the user id from the email search in db: ", verifyNewUserfromGoogleOauth._id);
 
-  if (verifyNewUserfromGoogleOauth._id) {
+  if (verifyNewUserfromGoogleOauth) {
     res.locals.userID = verifyNewUserfromGoogleOauth._id.toString();
     console.log(">>> check the userID from the database: ", res.locals.userID);
     res.locals.correctUser = true;
