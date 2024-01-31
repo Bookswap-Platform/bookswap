@@ -71,8 +71,9 @@ const AddBook = ({ updateBooks }) => {
 
     const booklist = {
       display: "flex",
-      flexDirectioin: "row",
-      overflowX: "auto",
+      flexDirection: "column",
+      overflowY: "auto",
+      height:"50dvh"
     };
 
     return (
