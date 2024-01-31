@@ -61,26 +61,26 @@ function HomeSearchBar() {
   };
 
   return (
-    <div className='home-container'>
+    <div className='home-container w-11/12 px-16 pt-20 h-dvh bg-parchment'>
       <div>
       <h1>Search for a book</h1>
       <div className='search-container'>
         <input
-          className='home-searchbar'
+          className='rounded border-0 border-b-4 w-64 h-12 bg-parchment'
           type='text'
           placeholder='Find book'
           value={searchBook}
           onChange={(e) => setSearchBook(e.target.value)}
         />
-        <div>
+        <div className='rounded'>
           {searchBook &&
             filteredBooks.map((book, index) => (
-              <ul key={index}>
+              <ul key={index} className={'pt-4 px-8 border-b-2 border-parchment bg-parchmentDark flex flex-col justify-center items-center'}>
                 <li>{book.title}</li>
-                <li>{book.author}</li>
+                <li className='italic'>{book.author}</li>
                 {/* <li>{book.genre}</li> */}
                 <li>{book.fullAddress}</li>
-                <button onClick={() => handleBookSelect(book)}>
+                <button onClick={() => handleBookSelect(book)} className='w-3/5'>
                   Show on map
                 </button>
               </ul>
