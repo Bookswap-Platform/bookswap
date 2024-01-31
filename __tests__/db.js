@@ -112,20 +112,54 @@ describe('userController.createUser', () => {
       verifyIdToken: jest.fn(),
     })),
   }));
-
-
+  
   describe('userController.verifyOAuth', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
+  
+    it('should call next with the user data in res.locals once the verification is successful', async () => {
+      const req = { body: { credential: 'some_token' } };
+      const res = { locals: {} };
+      const next = jest.fn();
 
-    it ('it should call next with the user data in res.locals once the verification is successful', async () => {
+    // Create a new instance of OAuth2Client using the mocked constructor
+    const {OAuth2Client} = require('google-auth-library');
+
+    const client = new OAuth2Client;
+  
+      const mockPayload = {
+        sub: 'user_id',
+        given_name: 'John',
+        family_name: 'Doe',
+        email: 'john.doe@example.com',
+      };
+  
+      const mockTicket = {
+        getPayload: jest.fn().mockResolvedValue(mockPayload),
+      };
+  
+  
+      
+ 
+     
 
 
 
+    // Call the method under test
+    await userController.verifyOAuth(req, res, next);
 
-
-
-
-    })
+    // Mock the behavior of verifyIdToken method of OAuth2Client
+   client.verifyIdToken.mockResolvedValue(mockTicket);
+     
+  
+      // Assert that the user data is set in res.locals and next is called once
+      expect(res.locals.user).toEqual({
+        name: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        userID: 'user_id',
+      });
+      expect(next).toHaveBeenCalledTimes(1);
+    });
   });

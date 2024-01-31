@@ -17,7 +17,7 @@ userController.createUser = (req, res, next) => {
     return res.status(400).json({ error: "All fields are required" });
   }
 
-  User.create({
+  return User.create({
     username,
     password,
     name,
@@ -88,7 +88,7 @@ userController.newUserFromGoogleOauth = async (req, res, next) => {
   const verifyNewUserfromGoogleOauth = await User.findOne({
     email: res.locals.user.email,
   });
-  console.log(">>> the user id from the email search in db: ", verifyNewUserfromGoogleOauth._id);
+  console.log(">>> the user id from the email search in db: ", verifyNewUserfromGoogleOauth);
 
   if (verifyNewUserfromGoogleOauth) {
     res.locals.userID = verifyNewUserfromGoogleOauth._id.toString();
