@@ -38,7 +38,7 @@ userController.createUser = (req, res, next) => {
 
       return next();
     })
-    .catch(err =>  next(err));
+    .catch((error) => {next(error)});
 };
 
 
@@ -47,7 +47,8 @@ userController.checkUser = (req, res, next) => {
   console.log("userController checkuser running");
   const { username } = req.params;
   console.log("username is ", username);
-  User.findOne({ username }).then((data) => {
+  User.findOne({ username })
+  .then((data) => {
     console.log("data is, ", data);
     if (data === null) {
       res.locals.userAvailability = true;
@@ -66,20 +67,25 @@ userController.verifyOAuth = async function (req, res, next) {
       idToken: req.body.credential,
       audience: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
     });
-    const payload = await ticket.getPayload();
+    const payload = ticket.getPayload();
     const userID = payload.sub;
     const name = payload.given_name;
     const lastName = payload.family_name;
     const email = payload.email;
-    const userData = { name, lastName, email, userID };
-    res.locals.user = userData;
+    res.locals.user = res.locals.user || {};
+    res.locals.user = { 
+      name, 
+      lastName, 
+      email, 
+      userID 
+    };
     console.log(">>> current user data from google login: ", res.locals.user);
     return next();
   } catch (err) {
     return next({
       log: "userController.verifyOAuth Error",
       status: 400,
-      message: { err: "verify Oauth Error" },
+      message: { err: `verify Oauth Error, ${err}`},
     });
   }
 };
@@ -154,7 +160,6 @@ userController.verifyUser = (req, res, next) => {
           );
           return next();
         } else {
-          console.log("wrong password");
           return res.json(false);
           // res.locals.correctUser = false;
           // return next();
