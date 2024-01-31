@@ -18,7 +18,7 @@ import Modal from './modal';
 const AddBook = ({ updateBooks }) => {
     const [books, setBooks] = useState([]);
     const [searchBook, setSearchBook] = useState('');
-    const [selectedBook, setSelectedBook] = useState('null');
+    const [selectedBook, setSelectedBook] = useState([]);
 
     const [isModalOpen, setModalOpen] = useState(false);
     const openModal = () => setModalOpen(true);
@@ -69,17 +69,29 @@ const AddBook = ({ updateBooks }) => {
         handleBookSelect(searchBook);
     }
 
+    const booklist = {
+      display: "flex",
+      flexDirection: "column",
+      overflowY: "auto",
+      height:"50dvh"
+    };
+
     return (
-        <><div> <input
-            className='add-search-bar'
-            type='text'
-            placeholder='Search a book title to add to your library'
+      <>
+        <div>
+          {" "}
+          <input
+            className="add-search-bar"
+            type="text"
+            placeholder="Search a book title to add to your library"
             value={searchBook}
-            onChange={(e) => setSearchBook(e.target.value)} /></div><div>
-                <button onClick={buttonOnClick}>
-                    Search Book
-                </button>
-                <Modal isOpen={isModalOpen} onClose={closeModal}>
+            onChange={(e) => setSearchBook(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <button onClick={buttonOnClick}>Search Book</button>
+          {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
                     {selectedBook && (
                         <ul>
                             <img src={selectedBook.previewUrl} className="resized-image"></img>
@@ -93,9 +105,36 @@ const AddBook = ({ updateBooks }) => {
                             </button>
                         </ul>
                     )}
-                </Modal>
-            </div></>
-    )
+                </Modal> */}
+          {isModalOpen && selectedBook.length > 0 && (
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <ul style={booklist}>
+              {selectedBook.map((book, index) => (
+                <li key={index}>
+                  <img
+                    src={book.previewUrl}
+                    className="resized-image"
+                    alt={`Book cover for ${book.title}`}
+                  />
+                  <p>Title: {book.title}</p>
+                  <p>Author: {book.author}</p>
+                  <button
+                    onClick={() => {
+                      addButtonOnClick();
+                      closeModal();
+                    }}
+                  >
+                    Add Book
+                  </button>
+                  <button onClick={() => openModal(index)}>View Details</button>
+                </li>
+              ))}
+            </ul>
+          </Modal>
+          )}
+        </div>
+      </>
+    );
 }
 
 export default AddBook
