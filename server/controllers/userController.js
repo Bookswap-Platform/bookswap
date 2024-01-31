@@ -428,8 +428,11 @@ userController.authenticateToken = (req, res, next) => {
         // Verify the token using jwt.verify method
         const decode = jwt.verify(token, process.env.TOKEN_SECRET);
         console.log('userController.authenticateToken success')
-        //  Return response with decode data
-        res.status(201).json()
+         // Attach the decoded data to the request object for later use in the route handler
+         req.decoded = decode;
+
+         // Continue to the next middleware or route handler
+         return next();
     }else{
 
         // Return response with error

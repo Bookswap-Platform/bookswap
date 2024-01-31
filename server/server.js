@@ -68,11 +68,21 @@ app.post(
   userController.authenticateToken,
   (req, res) => {
     console.log(
-      'authentication completed, correctUser is ',
-      res.locals.correctUser
+      'Decode is ',
+      req.decoded
     );
+
+    const decodedData = req.decoded;
+
+    res.status(201).json({
+      login: true,
+      data: 'Login successful',
+      decodedData: decodedData, // Include decoded data in the response if needed
+  });
     console.log('redirecting to home');
     // res.json(res.locals.correctUser); //commented this out to see if error goes away
+      
+    //currently unable to redirect to home
     res.status(200).redirect('/home')
     // }
     // else {
