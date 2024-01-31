@@ -77,7 +77,7 @@ const AddBook = ({ updateBooks }) => {
     };
 
     return (
-      <>
+      <div classname='w-2/3'>
         <div>
           {" "}
           <input
@@ -90,7 +90,9 @@ const AddBook = ({ updateBooks }) => {
         </div>
 
         <div>
-          <button onClick={buttonOnClick}>Search Book</button>
+          <button 
+            className='block'
+            onClick={buttonOnClick}>Search Book</button>
           {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
                     {selectedBook && (
                         <ul>
@@ -118,22 +120,25 @@ const AddBook = ({ updateBooks }) => {
                   />
                   <p>Title: {book.title}</p>
                   <p>Author: {book.author}</p>
-                  <button
-                    onClick={() => {
-                      addButtonOnClick();
-                      closeModal();
-                    }}
-                  >
-                    Add Book
-                  </button>
-                  <button onClick={() => openModal(index)}>View Details</button>
+                  <div className='flex justify-between'>
+                    <button
+                      className=''
+                      onClick={() => {
+                        addButtonOnClick();
+                        closeModal();
+                      }}
+                      >
+                      Add Book
+                    </button>
+                    <button className='' onClick={() => openModal(index)}>View Details</button>
+                  </div>
                 </li>
               ))}
             </ul>
           </Modal>
           )}
         </div>
-      </>
+      </div>
     );
 }
 
