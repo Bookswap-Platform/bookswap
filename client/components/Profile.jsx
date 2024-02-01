@@ -13,7 +13,7 @@ const Profile = () => {
   const [userData, setUserData] = useState({
     name: "",
     latName: "",
-    email: "",
+    password: "",
     address: "",
     instructions: "",
   });
@@ -96,7 +96,7 @@ const Profile = () => {
     const data = {
       name: userData.name,
       lastName: userData.lastName,
-      email: userData.email,
+      password: userData.password,
       address: userData.address,
       instructions: userData.instructions,
     };
