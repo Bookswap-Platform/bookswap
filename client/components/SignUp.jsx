@@ -27,7 +27,6 @@ const SignUp = () => {
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    callbackName: "GooglePlacesSetUp",
     requestOptions: {
       componentRestrictions: { country: "US" },
     },
