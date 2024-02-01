@@ -15,6 +15,7 @@ libraryController.checkLibrary = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log('Error in CheckLibrary middleware');
+    return next(error);
   }
 };
 
@@ -25,6 +26,7 @@ libraryController.getUserLibrary = async (req, res, next) => {
     res.locals.userLibrary = userLibrary.books;
   } catch (error) {
     console.log('Error in getUserLibrary middleware');
+    return next(error);
   }
 };
 

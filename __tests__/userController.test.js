@@ -347,174 +347,170 @@ describe('userController.verifyUser', () => {
   });
 });
 
-// describe('userController.updateUserProfile', () => {
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
+describe('userController.updateUserProfile', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-//   it('should update user profile successfully', async () => {
-//     const req = {
-//       body: {
-//         name: 'John',
-//         lastName: 'Doe',
-//         email: 'test@example.com',
-//         address: '123 Main St',
-//         instructions: 'Some instructions',
-//       },
-//     };
+  it('should update user profile successfully', async () => {
+    const req = {
+      body: {
+        name: 'John',
+        lastName: 'Doe',
+        address: '123 Main St',
+        instructions: 'Some instructions',
+      },
+    };
 
-//     const res = {
-//       locals: {
-//         user: {
-//           username: 'testuser',
-//         },
-//       },
-//     };
+    const res = {
+      locals: {
+        user: {
+          username: 'testuser',
+        },
+      },
+    };
 
-//     const next = jest.fn();
+    const next = jest.fn();
 
-//     const updatedUserData = {
-//       _id: 'dummyUserId',
-//       username: 'testuser',
-//       name: 'John',
-//       lastName: 'Doe',
-//       email: 'test@example.com',
-//       address: '123 Main St',
-//       instructions: 'Some instructions',
-//     };
+    const updatedUserData = {
+      _id: 'dummyUserId',
+      username: 'testuser',
+      name: 'John',
+      lastName: 'Doe',
+      address: '123 Main St',
+      instructions: 'Some instructions',
+    };
 
-//     User.findOneAndUpdate.mockResolvedValueOnce(updatedUserData);
+    User.findOneAndUpdate.mockResolvedValueOnce(updatedUserData);
 
-//     await userController.updateUserProfile(req, res, next);
+    await userController.updateUserProfile(req, res, next);
 
-//     expect(res.locals.user).toEqual(updatedUserData);
-//     expect(User.findOneAndUpdate).toHaveBeenCalledWith(
-//       { username: res.locals.user.username },
-//       {
-//         name: req.body.name,
-//         lastName: req.body.lastName,
-//         email: req.body.email,
-//         address: req.body.address,
-//         instructions: req.body.instructions,
-//       },
-//       { new: true }
-//     );
-//     expect(next).toHaveBeenCalled();
-//   });
+    expect(res.locals.user).toEqual(updatedUserData);
+    expect(User.findOneAndUpdate).toHaveBeenCalledWith(
+      { username: res.locals.user.username },
+      {
+        name: req.body.name,
+        lastName: req.body.lastName,
+        address: req.body.address,
+        instructions: req.body.instructions,
+      },
+      { new: true }
+    );
+    expect(next).toHaveBeenCalled();
+  });
 
-//   it('should handle errors during profile update', async () => {
-//     const req = {
-//       body: {
-//         name: 'John',
-//         lastName: 'Doe',
-//         email: 'test@example.com',
-//         address: '123 Main St',
-//         instructions: 'Some instructions',
-//       },
-//     };
+  it('should handle errors during profile update', async () => {
+    const req = {
+      body: {
+        name: 'John',
+        lastName: 'Doe',
+        address: '123 Main St',
+        instructions: 'Some instructions',
+      },
+    };
 
-//     const res = {
-//       locals: {
-//         user: {
-//           username: 'testuser',
-//         },
-//       },
-//     };
+    const res = {
+      locals: {
+        user: {
+          username: 'testuser',
+        },
+      },
+    };
 
-//     const next = jest.fn();
+    const next = jest.fn();
 
-//     const errorMessage = 'Update failed';
-//     const error = new Error(errorMessage);
+    const errorMessage = 'Update failed';
+    const error = new Error(errorMessage);
 
-//     User.findOneAndUpdate.mockRejectedValueOnce(error);
+    User.findOneAndUpdate.mockRejectedValueOnce(error);
 
-//     await userController.updateUserProfile(req, res, next);
+    await userController.updateUserProfile(req, res, next);
 
-//     expect(next).toHaveBeenCalledWith(error);
-//   });
-// });
+    expect(next).toHaveBeenCalledWith(error);
+  });
+});
 
-// describe('userController.addToUserLibrary', () => {
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
+describe('userController.addToUserLibrary', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-//   it('should add book to user library successfully', async () => {
-//     const req = {
-//       // Assuming req contains necessary data, such as res.locals.user.username and res.locals.book
-//     };
+  it('should add book to user library successfully', async () => {
+    const req = {
+      // Assuming req contains necessary data, such as res.locals.user.username and res.locals.book
+    };
 
-//     const res = {
-//       locals: {
-//         user: {
-//           username: 'testuser',
-//           books: [],
-//         },
-//         book: {
-//           _id: 'dummyBookId',
-//           title: 'Dummy Book Title',
-//         },
-//       },
-//     };
+    const res = {
+      locals: {
+        user: {
+          username: 'testuser',
+          books: [],
+        },
+        book: {
+          _id: 'dummyBookId',
+          title: 'Dummy Book Title',
+        },
+      },
+    };
 
-//     const next = jest.fn();
+    const next = jest.fn();
 
-//     const user = {
-//       username: 'testuser',
-//       books: [],
-//     };
+    const user = {
+      username: 'testuser',
+      books: [],
+    };
 
-//     User.findOne.mockResolvedValueOnce(user);
-//     User.findOneAndUpdate.mockResolvedValueOnce(user);
+    User.findOne.mockResolvedValueOnce(user);
+    User.findOneAndUpdate.mockResolvedValueOnce(user);
 
-//     await userController.addToUserLibrary(req, res, next);
+    await userController.addToUserLibrary(req, res, next);
 
-//     expect(User.findOne).toHaveBeenCalledWith({ username: res.locals.user.username });
-//     expect(User.findOneAndUpdate).toHaveBeenCalledWith(
-//       { username: res.locals.user.username },
-//       { $set: { books: [{ book: res.locals.book }] } },
-//       { new: true }
-//     );
-//     expect(res.locals.user).toEqual(user);
-//     expect(next).toHaveBeenCalled();
-//   });
+    expect(User.findOne).toHaveBeenCalledWith({ username: res.locals.user.username });
+    expect(User.findOneAndUpdate).toHaveBeenCalledWith(
+      { username: res.locals.user.username },
+      { $set: { books: [{ book: res.locals.book }] } },
+      { new: true }
+    );
+    expect(res.locals.user).toEqual(user);
+    expect(next).toHaveBeenCalled();
+  });
 
-//   it('should handle errors when adding book to user library', async () => {
-//     const req = {
-//       // Assuming req contains necessary data, such as res.locals.user.username and res.locals.book
-//     };
+  it('should handle errors when adding book to user library', async () => {
+    const req = {
+      // Assuming req contains necessary data, such as res.locals.user.username and res.locals.book
+    };
 
-//     const res = {
-//       locals: {
-//         user: {
-//           username: 'testuser',
-//           books: [],
-//         },
-//         book: {
-//           _id: 'dummyBookId',
-//           title: 'Dummy Book Title',
-//         },
-//       },
-//     };
+    const res = {
+      locals: {
+        user: {
+          username: 'testuser',
+          books: [],
+        },
+        book: {
+          _id: 'dummyBookId',
+          title: 'Dummy Book Title',
+        },
+      },
+    };
 
-//     const next = jest.fn();
+    const next = jest.fn();
 
-//     // Move errorMessage declaration to a higher scope
-//     const errorMessage = 'Error adding book to user library';
+    // Move errorMessage declaration to a higher scope
+    const errorMessage = 'Error adding book to user library';
 
-//     // Define error with errorMessage
-//     const error = new Error(errorMessage);
+    // Define error with errorMessage
+    const error = new Error(errorMessage);
 
-//     User.findOne.mockRejectedValueOnce(error);
+    User.findOne.mockRejectedValueOnce(error);
 
-//     await userController.addToUserLibrary(req, res, next);
+    await userController.addToUserLibrary(req, res, next);
 
-//     expect(User.findOne).toHaveBeenCalledWith({ username: res.locals.user.username });
-//     expect(User.findOneAndUpdate).not.toHaveBeenCalled();
-//     expect(next).toHaveBeenCalledWith(error);
-//   });
+    expect(User.findOne).toHaveBeenCalledWith({ username: res.locals.user.username });
+    expect(User.findOneAndUpdate).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(error);
+  });
 
-// });
+});
 
 // describe('userController.sendSwapRequest', () => {
 //   afterEach(() => {
