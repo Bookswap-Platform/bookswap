@@ -77,11 +77,11 @@ const AddBook = ({ updateBooks }) => {
     };
 
     return (
-      <div classname='w-2/3'>
+      <div className='w-11/12'>
         <div>
           {" "}
           <input
-            className="add-search-bar"
+            className="add-search-bar block mx-auto"
             type="text"
             placeholder="Search a book title to add to your library"
             value={searchBook}
@@ -91,7 +91,7 @@ const AddBook = ({ updateBooks }) => {
 
         <div>
           <button 
-            className='block'
+            className='block mx-auto w-full'
             onClick={buttonOnClick}>Search Book</button>
           {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
                     {selectedBook && (
@@ -112,17 +112,21 @@ const AddBook = ({ updateBooks }) => {
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <ul style={booklist}>
               {selectedBook.map((book, index) => (
-                <li key={index}>
-                  <img
-                    src={book.previewUrl}
-                    className="resized-image"
-                    alt={`Book cover for ${book.title}`}
-                  />
-                  <p>Title: {book.title}</p>
-                  <p>Author: {book.author}</p>
-                  <div className='flex justify-between'>
+                <li key={index} className='hover:bg-parchment py-8'>
+                  <div className='flex justify-start items-center'>
+                    <img
+                      src={book.previewUrl}
+                      className="resized-image h-32 max-w-20 mx-8"
+                      alt={`Book cover for ${book.title}`}
+                      />
+                    <div className='w-48'>
+                      <p>Title: {book.title}</p>
+                      <p>Author: {book.author}</p>
+                    </div>
+                  </div>
+                  <div className='flex flex-col items-center justify-between'>
                     <button
-                      className=''
+                      className='mb-0 w-10/12'
                       onClick={() => {
                         addButtonOnClick();
                         closeModal();
@@ -130,7 +134,7 @@ const AddBook = ({ updateBooks }) => {
                       >
                       Add Book
                     </button>
-                    <button className='' onClick={() => openModal(index)}>View Details</button>
+                    <button className='w-10/12' onClick={() => openModal(index)}>View Details</button>
                   </div>
                 </li>
               ))}
