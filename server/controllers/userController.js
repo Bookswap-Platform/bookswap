@@ -175,19 +175,19 @@ userController.verifyUser = (req, res, next) => {
 
 userController.updateUserProfile = async (req, res, next) => {
   console.log("update user profile running");
-  const { name, lastName, email, address, instructions } = req.body;
+  const { name, lastName, password, address, instructions } = req.body;
   console.log(
     "name, email, address and instructions are ",
     name,
     lastName,
-    email,
+    password,
     address,
     instructions
   );
   try {
     const updatedUser = await User.findOneAndUpdate(
       { username: res.locals.user.username },
-      { name, lastName, email, address, instructions },
+      { name, lastName, password, address, instructions },
       { new: true }
     );
     res.locals.user = updatedUser;
