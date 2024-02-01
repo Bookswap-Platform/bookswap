@@ -200,7 +200,8 @@ userController.updateUserProfile = async (req, res, next) => {
 };
 
 userController.addToUserLibrary = async (req, res, next) => {
-  const userId = res.locals.user._id;
+  try {
+  // const userId = res.locals.user._id;
   // const { username } = req.params;
   const user = await User.findOne({ username: res.locals.user.username });
   // const user = await User.findOne({ username });
@@ -210,7 +211,7 @@ userController.addToUserLibrary = async (req, res, next) => {
   const currentBooks = [...user.books];
   // currentBooks.push([{ book: bookId }, { isAvailable: true }]);
   currentBooks.push({ book });
-  try {
+ 
     if (!user.books.findIndex((el) => el.book.title === book.title)) {
       console.log("Book Exists in User Library!");
       res.locals.user = user;
@@ -234,6 +235,7 @@ userController.addToUserLibrary = async (req, res, next) => {
     return next();
   } catch (err) {
     console.log("Error in userController.addToUserLibrary: ", err);
+    return next(err);
   }
 };
 
@@ -244,7 +246,6 @@ userController.sendSwapRequest = async (req, res, next) => {
   );
 
   const user = await User.findOne({ username: reqUsername });
-  console.log(user.username);
   // const outgoingRequests = res.locals.user.outgoingRequests;
   let outgoingRequests = user.outgoingRequests;
   console.log("outgoingRequests firstly is ", outgoingRequests);
