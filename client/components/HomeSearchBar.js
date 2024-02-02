@@ -61,17 +61,17 @@ function HomeSearchBar() {
   };
 
   return (
-    <div className='home-container w-11/12 px-16 ptb-20 h-dvh bg-parchment '>
-      <div className='w-1/4 h-full flex flex-col '>
+    <div className='home-container w-11/12 px-16 py-4 h-dvh bg-parchment '>
+      <div className='w-1/6 h-full flex flex-col '>
         {/* <h1>Search for a book</h1> */}
           <input 
-            className='rounded border-0 border-b-4 h-12 bg-parchment fixed'
+            className='rounded border-0 border-b-4 h-12 w-full bg-parchment '
             type='text'
             placeholder='Find a book'
             value={searchBook}
             onChange={(e) => setSearchBook(e.target.value)}
           />
-          <div className='rounded mt-10 h-7/8 overflow-y-auto'>
+          <div className='rounded mt-2 h-3/4 overflow-y-auto'>
             {searchBook &&
               filteredBooks.map((book, index) => (
                 <ul key={index} className={'p-3 px-0 border-b-2 border-parchment flex flex-col justify-center items-center'}>
@@ -97,7 +97,7 @@ function HomeSearchBar() {
       <GoogleMap
         bookAddress={bookAddress[0]}
         selectedBook={selectedBook}
-        className='google-map w-3/4'
+        className='google-map w-5/6 h-dvh'
         handleRequestBook={handleRequestBook}
         reqUsername={user.username}
       />

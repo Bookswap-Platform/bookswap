@@ -38,7 +38,7 @@ function GoogleMap({bookAddress, handleRequestBook, reqUsername }) {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div className="h-5/6 w-3/4 pt-14 mx-auto">
+      <div className="h-5/6 w-full pt-14 mx-auto">
         <Map zoom={9} center={position} mapId={'49e4b9ad955c530'}>
           {bookAddress && (
             <AdvancedMarker
