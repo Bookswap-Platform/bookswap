@@ -183,7 +183,6 @@ const Profile = () => {
             <input
               name="password"
               type="password"
-              placeholder={userData.password}
               onChange={handleUserDataChange}
             />
           </div>
