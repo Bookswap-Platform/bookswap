@@ -32,19 +32,23 @@ const MyBooks = ({ books, deleteBook }) => {
   console.log('my retrieved books are', retrievedBooks);
 
   return (
-    <div>
-      <Carousel responsive={responsive}>
+    <div className='min-w-96'>
+      {/* <Carousel responsive={responsive}> */}
         {retrievedBooks.map(
           (book, index) =>
             book && (
-              <div key={index}>
-                <img src={book.previewUrl} style={{ height: '300px' }}></img>
-                <li>
-                  <b>{book.title}</b>
-                </li>
-                <li>{book.author}</li>
+              <div
+                className='flex justify-start items-center w-full mb-14'
+                key={index}>
+                <img src={book.previewUrl} style={{ height: '200px' }}></img>
+                <div className='flex flex-col ml-8'>
+                  <li>
+                    <b>{book.title}</b>
+                  </li>
+                  <li>{book.author}</li>
+                  
                 <button
-                  className='transparent'
+                  className='w-24'
                   onClick={() => {
                     const confirmDelete = window.confirm(
                       'Are you sure you want to delete this book?'
@@ -54,12 +58,13 @@ const MyBooks = ({ books, deleteBook }) => {
                 >
                   Delete
                 </button>
+                </div>
                 {/* <li>{book.genre}</li> */}
                 {/* Add other book details as needed */}
               </div>
             )
         )}
-      </Carousel>
+      {/* </Carousel> */}
     </div>
   );
 };

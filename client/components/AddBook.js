@@ -77,11 +77,11 @@ const AddBook = ({ updateBooks }) => {
     };
 
     return (
-      <>
+      <div className='w-11/12'>
         <div>
           {" "}
           <input
-            className="add-search-bar"
+            className="add-search-bar block mx-auto"
             type="text"
             placeholder="Search a book title to add to your library"
             value={searchBook}
@@ -90,7 +90,9 @@ const AddBook = ({ updateBooks }) => {
         </div>
 
         <div>
-          <button onClick={buttonOnClick}>Search Book</button>
+          <button 
+            className='block mx-auto w-full'
+            onClick={buttonOnClick}>Search Book</button>
           {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
                     {selectedBook && (
                         <ul>
@@ -110,30 +112,37 @@ const AddBook = ({ updateBooks }) => {
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <ul style={booklist}>
               {selectedBook.map((book, index) => (
-                <li key={index}>
-                  <img
-                    src={book.previewUrl}
-                    className="resized-image"
-                    alt={`Book cover for ${book.title}`}
-                  />
-                  <p>Title: {book.title}</p>
-                  <p>Author: {book.author}</p>
-                  <button
-                    onClick={() => {
-                      addButtonOnClick();
-                      closeModal();
-                    }}
-                  >
-                    Add Book
-                  </button>
-                  <button onClick={() => openModal(index)}>View Details</button>
+                <li key={index} className='hover:bg-parchment py-8'>
+                  <div className='flex justify-start items-center'>
+                    <img
+                      src={book.previewUrl}
+                      className="resized-image h-32 max-w-20 mx-8"
+                      alt={`Book cover for ${book.title}`}
+                      />
+                    <div className='w-48'>
+                      <p>Title: {book.title}</p>
+                      <p>Author: {book.author}</p>
+                    </div>
+                  </div>
+                  <div className='flex flex-col items-center justify-between'>
+                    <button
+                      className='mb-0 w-10/12'
+                      onClick={() => {
+                        addButtonOnClick();
+                        closeModal();
+                      }}
+                      >
+                      Add Book
+                    </button>
+                    <button className='w-10/12' onClick={() => openModal(index)}>View Details</button>
+                  </div>
                 </li>
               ))}
             </ul>
           </Modal>
           )}
         </div>
-      </>
+      </div>
     );
 }
 
