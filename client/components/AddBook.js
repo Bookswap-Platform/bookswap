@@ -28,7 +28,7 @@ const AddBook = ({ updateBooks }) => {
     //checks global library first before making API call, for performance
 
     const handleBookSelect = (book) => {
-        console.log(`book: ${book}`)
+        console.log(`>>> book in handleBookSelect: ${book}`)
         fetch('/library/action/findBook', {
             method: 'POST',
             headers: {
@@ -38,15 +38,15 @@ const AddBook = ({ updateBooks }) => {
         })
             .then(data => data.json())
             .then(data => {
-                setSelectedBook(data);
+                setSelectedBook(data); // >>>>>>>>>>>>>>>>>>>>>>>   there are five books
                 setSearchBook('');
             })
-
     };
     // throw handler here for adding book
     // POST to library/action/addBook
 
     const handleAddBook = (book) => {
+        console.log(">>> book is selected: ", book);
         fetch('/library/action/addBook', {
             method: 'POST',
             headers: {
@@ -56,12 +56,12 @@ const AddBook = ({ updateBooks }) => {
         })
             .then(data => data.json())
             .then(data => updateBooks(data))
+            .then(data => console.log(">>> selected book to library: ", data))
             .catch(err => console.log('APP error adding book: ', err))
     }
 
-    const addButtonOnClick = () => {
-        handleAddBook(selectedBook);
-        // onUpdate(selectedBook);
+    const addButtonOnClick = (book) => {
+        handleAddBook(book);
     }
 
     const buttonOnClick = () => {
@@ -91,21 +91,6 @@ const AddBook = ({ updateBooks }) => {
 
         <div>
           <button onClick={buttonOnClick}>Search Book</button>
-          {/* <Modal isOpen={isModalOpen} onClose={closeModal}>
-                    {selectedBook && (
-                        <ul>
-                            <img src={selectedBook.previewUrl} className="resized-image"></img>
-                            <p>Title: {selectedBook.title}</p>
-                            <p>Author: {selectedBook.author}</p>
-                            <button onClick={() => {
-                                addButtonOnClick();
-                                closeModal();
-                            }} >
-                                Add Book
-                            </button>
-                        </ul>
-                    )}
-                </Modal> */}
           {isModalOpen && selectedBook.length > 0 && (
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <ul style={booklist}>
@@ -120,7 +105,8 @@ const AddBook = ({ updateBooks }) => {
                   <p>Author: {book.author}</p>
                   <button
                     onClick={() => {
-                      addButtonOnClick();
+                      console.log(">>> click this book: ", book)
+                      addButtonOnClick(book);
                       closeModal();
                     }}
                   >
@@ -137,4 +123,4 @@ const AddBook = ({ updateBooks }) => {
     );
 }
 
-export default AddBook
+export default AddBook;

@@ -200,6 +200,7 @@ userController.updateUserProfile = async (req, res, next) => {
 };
 
 userController.addToUserLibrary = async (req, res, next) => {
+  console.log(">>> add to userlibrary for user: ", res.locals.user);
   const userId = res.locals.user._id;
   // const { username } = req.params;
   const user = await User.findOne({ username: res.locals.user.username });

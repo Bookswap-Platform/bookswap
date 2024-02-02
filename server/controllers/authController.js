@@ -45,7 +45,7 @@ authControllers.verifyToken = (req, res, next) => {
     }
 
     // if there is token then verify its token
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
       if (err) {
         if (err.name === "TokenExpiredError") {
           res.locals.correctUser = false;
@@ -60,23 +60,17 @@ authControllers.verifyToken = (req, res, next) => {
 
       console.log("decoded content in jwt.verify: ", decoded);
 
-      // find the user information from db and save to res.locals.user
-      User.findOne({ _id: decoded.userID })
-        .then((data) => {
-          res.locals.user = data;
-          console.log("currenst user: ", data);
-        })
-        .catch((err) => {
-          return next(
-            "Error in find user from db authControllers.verifyToken jwt.verify: " +
-              JSON.stringify(err)
-          );
-        });
+      const currentUser = await User.findOne({_id: decoded.userID});
+      if (currentUser) {
+        res.locals.user = currentUser;
+        console.log(">>> current user: ", res.locals.user);
+      } else {
+        return next("User not found in the db.")}
 
       req.userID = decoded.id;
       res.locals.correctUser = true;
+      return next();
     });
-    return next();
   } catch (err) {
     return next("Error in authControllers.verifyToken: " + JSON.stringify(err));
   }
