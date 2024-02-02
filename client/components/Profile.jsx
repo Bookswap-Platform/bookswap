@@ -152,7 +152,7 @@ const Profile = () => {
     }
   };
 
-  const inputStyles = 'rounded mb-10 border-0 border-b-4 w-64 h-8 bg-parchment';
+  const inputStyles = 'rounded mb-10 border-0 border-b-4 w-full h-8 bg-parchment';
   const labelStyles = '-mb-1';
 
   return (
@@ -184,9 +184,10 @@ const Profile = () => {
             />
           </div>
 
-          <div className={labelStyles}>Email:</div>
+          <div className={labelStyles}>Password:</div>
           <div>
             <input
+              className={inputStyles}
               name="password"
               type="password"
               onChange={handleUserDataChange}
