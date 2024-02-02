@@ -61,14 +61,12 @@ const Profile = () => {
     const suggestion_items = {
         cursor: "pointer",
         padding: "10px",
-        border: "1px solid #ddd",
         margin: "5px",
         transition: "background-color 0.3s ease",
-        // position: "absolute",
         top: "100%",
         left: 0,
-        maxHeight: "200px"
-    }
+        maxHeight: "200px",
+      }
 
   const renderSuggestions = () =>
     data.map((suggestion) => {
@@ -78,7 +76,7 @@ const Profile = () => {
       } = suggestion;
 
       return (
-        <li key={place_id} style={suggestion_items} onClick={handleAddressSelect(suggestion)}>
+        <li key={place_id} className="addressSuggestion" style={suggestion_items} onClick={handleAddressSelect(suggestion)}>
           <strong>{main_text}</strong> <small>{secondary_text}</small>
         </li>
       );
@@ -185,7 +183,6 @@ const Profile = () => {
             <input
               name="password"
               type="password"
-              placeholder={userData.password}
               onChange={handleUserDataChange}
             />
           </div>
@@ -200,7 +197,7 @@ const Profile = () => {
               onChange={handleAddressInput}
               disabled={!ready}
             />
-            {status === "OK" && <ul>{renderSuggestions()}</ul>}
+            {status === "OK" && <ul className='addressList'>{renderSuggestions()}</ul>}
           </div>
 
           <div>Pick up instructions (Optional)</div>

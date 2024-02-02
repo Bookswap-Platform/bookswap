@@ -62,7 +62,6 @@ const SignUp = () => {
   const suggestion_items = {
     cursor: "pointer",
     padding: "10px",
-    border: "1px solid #ddd",
     margin: "5px",
     transition: "background-color 0.3s ease",
     top: "100%",
@@ -82,6 +81,7 @@ const SignUp = () => {
           key={place_id}
           style={suggestion_items}
           onClick={handleAddressSelect(suggestion)}
+          className="addressSuggestion"
         >
           <strong>{main_text}</strong> <small>{secondary_text}</small>
         </li>
@@ -184,7 +184,7 @@ const SignUp = () => {
             onChange={handleAddressInput}
             disabled={!ready}
           />
-          {status === "OK" && <ul>{renderSuggestions()}</ul>}
+          {status === "OK" && <ul className="addressList">{renderSuggestions()}</ul>}
         </div>
 
         <div>Pick up instructions (Optional)</div>
