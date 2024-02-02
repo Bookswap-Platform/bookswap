@@ -197,3 +197,14 @@ h1 {
 ul {
   list-style: none;
 }
+
+.addressList {
+  position: absolute;
+  background-color: #F4F2E9 ;
+  border-radius: 8px;
+
+}
+
+.addressSuggestion:hover{
+  background-color: #e2ddc7 ;
+}
