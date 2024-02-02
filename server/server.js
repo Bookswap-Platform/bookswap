@@ -18,18 +18,18 @@ const sessionController = require('./controllers/sessionController');
 // added for JWT
 const jwtController = require('./controllers/jwtController');
 
-app.use(
-  '/action/jwtRoute',
-  jwtController.generateToken,
-  userController.authenticateToken,
+// app.use(
+//   '/action/jwtRoute',
+//   jwtController.generateToken,
+//   userController.authenticateToken,
 
-  (req, res) => {
-    console.log(
-      'JWT token verified. userData: ', res.locals.userData
-    );
-    res.status(200).json(res.locals.userData);
-  }
-);
+//   (req, res) => {
+//     console.log(
+//       'JWT token verified. userData: ', res.locals.userData
+//     );
+//     res.status(200).json(res.locals.userData);
+//   }
+// );
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/index.html"));
@@ -67,43 +67,35 @@ app.post(
   userController.authenticateToken,
   (req, res) => {
     console.log(
-      'Decode is ',
-      req.decoded
+      'Username on Decode token is ',
+      req.decoded.username
     );
 
     const decodedData = req.decoded;
 
-    res.status(201).json({
-      login: true,
-      data: 'Login successful',
-      decodedData: decodedData, // Include decoded data in the response if needed
-  });
     console.log('redirecting to home');
     // res.json(res.locals.correctUser); //commented this out to see if error goes away
       
     //currently unable to redirect to home
     res.status(200).redirect('/home')
-    // }
-    // else {
-    //     res.json(res.locals.correctUser)
-    // }
+
   }
 );
 
-app.post(
-  "/action/oAuth",
-  userController.verifyOAuth,
-  userController.newUserFromGoogleOauth,
-  cookieController.setSSIDCookie,
-  sessionController.startSession,
-  (req, res) => {
-    // console.log("Google OAuth token verified. userData: ", res.locals.user);
-    res.status(200).json(res.locals.correctUser);
-  }
-);
+// app.post(
+//   "/action/oAuth",
+//   userController.verifyOAuth,
+//   userController.newUserFromGoogleOauth,
+//   cookieController.setSSIDCookie,
+//   sessionController.startSession,
+//   (req, res) => {
+//     // console.log("Google OAuth token verified. userData: ", res.locals.user);
+//     res.status(200).json(res.locals.correctUser);
+//   }
+// );
 
 //Protect server side requests to protected pages
-app.get("/home", sessionController.isLoggedIn, (req, res) => {
+app.get("/home", userController.authenticateToken, (req, res) => {
   res.status(200).json(res.locals.user);
 });
 
@@ -111,20 +103,20 @@ app.get("/myLibrary", sessionController.isLoggedIn, (req, res) => {
   res.status(200).json(res.locals.user);
 });
 
-app.get("/action/getUser", sessionController.isLoggedIn, (req, res) => {
+app.get("/action/getUser", userController.authenticateToken, (req, res) => {
   res.status(200).json(res.locals.user);
 });
 
 app.post(
   "/action/updateUser",
-  sessionController.isLoggedIn,
+  userController.authenticateToken,
   userController.updateUserProfile,
   (req, res) => {
     res.status(200).json(res.locals.user);
   }
 );
 
-app.get("/action/getLibrary", sessionController.isLoggedIn, (req, res) => {
+app.get("/action/getLibrary", userController.authenticateToken, (req, res) => {
   console.log("get library running");
   res.status(200).json(res.locals.user.books);
 });
@@ -140,7 +132,7 @@ app.get(
 
 app.get(
   "/action/markAsRead/:id",
-  sessionController.isLoggedIn,
+  userController.authenticateToken,
   userController.markReadNotification,
   (req, res) => {
     res.status(200).json(res.locals.user.notifications);
@@ -149,7 +141,7 @@ app.get(
 
 app.get(
   "/action/clearNotifications",
-  sessionController.isLoggedIn,
+  userController.authenticateToken,
   userController.clearNotifications,
   (req, res) => {
     res.status(200).json(res.locals.user.notifications);
