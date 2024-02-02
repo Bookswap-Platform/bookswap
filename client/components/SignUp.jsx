@@ -144,7 +144,7 @@ const SignUp = () => {
 
 
   return (
-    <div className="form-container bg-parchment w-10/12 mx-auto flex flex-col justify-center items-center h-dvh">
+    <div className="form-container bg-parchment w-10/12 mx-auto flex flex-col justify-center items-center min-h-dvh">
       <img src={BookSwapLogo} className="bookswap-logo" />
 
       <h3 className='m-0 font-bold my-6'>Sign up:</h3>
@@ -199,7 +199,7 @@ const SignUp = () => {
               onChange={handleAddressInput}
               disabled={!ready}
             />
-            {status === "OK" && <ul className="addressList">{renderSuggestions()}</ul>}
+            {status === "OK" && <ul className="addressList shadow-lg">{renderSuggestions()}</ul>}
           </div>
         </div>
         
