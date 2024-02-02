@@ -33,6 +33,10 @@ apiController.checkApi = async (req, res, next) => {
     }
 }
 
+apiController.newYorkTimes = async (req, res, next) => {
+
+}
+
 // apiController.addToGlobalLibrary = async (req, res, next) => {
 //     try {
 //         const olWorkNumber = req.body;
