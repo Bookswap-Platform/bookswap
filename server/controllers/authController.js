@@ -13,7 +13,7 @@ authControllers.generateToken = (req, res, next) => {
       {
         algorithm: "HS256",
         allowInsecureKeySizes: true,
-        expiresIn: 60
+        expiresIn: "3600s"
         // 86400,
       }
     );
@@ -46,13 +46,20 @@ authControllers.verifyToken = (req, res, next) => {
     // if there is token then verify its token
     jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
       if (err) {
-        return next(
-          "Error in authControllers.verifyToken jwt.verify: " +
-            JSON.stringify(err)
-        );
+        if (err.name === "TokenExpiredError") {
+          res.locals.correctUser = false;
+          return res.redirect("/");
+        } else {
+          return next(
+            "Error in authControllers.verifyToken jwt.verify: " +
+              JSON.stringify(err)
+          );
+        }
       }
+
       console.log("decoded content in jwt.verify: ", decoded);
       req.userID = decoded.id;
+      res.locals.correctUser = true;
     });
     return next();
   } catch (err) {

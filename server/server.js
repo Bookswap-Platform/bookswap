@@ -128,7 +128,7 @@ app.get(
 
 //Verify active session for client side requests to protected pages
 app.get("/action/auth", authController.verifyToken, (req, res) => {
-  res.status(200).json(true);
+  res.status(200).json(res.locals.correctUser);
 });
 
 //Logout
