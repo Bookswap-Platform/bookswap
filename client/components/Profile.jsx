@@ -152,15 +152,20 @@ const Profile = () => {
     }
   };
 
+  const inputStyles = 'rounded mb-10 border-0 border-b-4 w-full h-8 bg-parchment';
+  const labelStyles = '-mb-1';
+
   return (
     <div>
       <HomeNavBar />
-      <div className="form-container">
-        <h3>Update your profile</h3>
+      <div className=''>
+      <div className="form-container flex justify-center items-center flex-col mx-auto w-11/12 bg-parchment">
+        <h3 className='text-3xl font-bold mb-10'>Update your profile</h3>
         <form onSubmit={handleSubmit}>
-          <div>First Name</div>
+          <div className={labelStyles}>First Name:</div>
           <div>
             <input
+              className={inputStyles}
               name="name"
               type="text"
               placeholder={userData.name}
@@ -168,9 +173,10 @@ const Profile = () => {
             />
           </div>
 
-          <div>Last Name</div>
+          <div className={labelStyles}>Last Name:</div>
           <div>
             <input
+              className={inputStyles}
               name="lastName"
               type="text"
               placeholder={userData.lastName}
@@ -178,18 +184,20 @@ const Profile = () => {
             />
           </div>
 
-          <div>Password</div>
+          <div className={labelStyles}>Password:</div>
           <div>
             <input
+              className={inputStyles}
               name="password"
               type="password"
               onChange={handleUserDataChange}
             />
           </div>
 
-          <div>Address</div>
+          <div className={labelStyles}>Address:</div>
           <div ref={ref}>
             <input
+              className={inputStyles}
               id="address-input"
               name="address"
               value={value}
@@ -200,9 +208,10 @@ const Profile = () => {
             {status === "OK" && <ul className='addressList'>{renderSuggestions()}</ul>}
           </div>
 
-          <div>Pick up instructions (Optional)</div>
+          <div className={labelStyles}>Pick up instructions (Optional)</div>
           <div>
             <input
+              className={inputStyles}
               name="instructions"
               type="text"
               placeholder={userData.instructions}
@@ -210,11 +219,15 @@ const Profile = () => {
             />
           </div>
 
-          <button type="submit" disabled={!userData.name || !userData.address}>
+          <button 
+            className={'bg-darkGreen mt-1'}
+            type="submit" 
+            disabled={!userData.name || !userData.address}>
             Update profile
           </button>
         </form>
         {warning()}
+      </div>
       </div>
     </div>
   );
