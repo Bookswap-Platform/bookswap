@@ -61,46 +61,43 @@ function HomeSearchBar() {
   };
 
   return (
-    <div className='home-container w-11/12 px-16 pt-20 h-dvh bg-parchment'>
-      <div>
-      <h1>Search for a book</h1>
-      <div className='search-container'>
-        <input
-          className='rounded border-0 border-b-4 w-64 h-12 bg-parchment'
-          type='text'
-          placeholder='Find book'
-          value={searchBook}
-          onChange={(e) => setSearchBook(e.target.value)}
-        />
-        <div className='rounded'>
-          {searchBook &&
-            filteredBooks.map((book, index) => (
-              <ul key={index} className={'pt-4 px-8 border-b-2 border-parchment bg-parchmentDark flex flex-col justify-center items-center'}>
-                <li>{book.title}</li>
-                <li className='italic'>{book.author}</li>
-                {/* <li>{book.genre}</li> */}
-                <li>{book.fullAddress}</li>
-                <button onClick={() => handleBookSelect(book)} className='w-3/5'>
-                  Show on map
-                </button>
+    <div className='home-container w-11/12 px-16 ptb-20 h-dvh bg-parchment '>
+      <div className='w-1/4 h-full flex flex-col '>
+        {/* <h1>Search for a book</h1> */}
+          <input 
+            className='rounded border-0 border-b-4 h-12 bg-parchment fixed'
+            type='text'
+            placeholder='Find a book'
+            value={searchBook}
+            onChange={(e) => setSearchBook(e.target.value)}
+          />
+          <div className='rounded mt-10 h-7/8 overflow-y-auto'>
+            {searchBook &&
+              filteredBooks.map((book, index) => (
+                <ul key={index} className={'p-3 px-0 border-b-2 border-parchment flex flex-col justify-center items-center'}>
+                  <img className='rounded object-cover w-full h-full' src={book.previewUrl} onClick={() => handleBookSelect(book)}/>
+                  <li className={'font-bold text-lg mt-2'}>{book.title}</li>
+                  <li className='italic text-sm'>{book.author}</li>
+                  {/* <li>{book.genre}</li> */}
+                  <li>{book.fullAddress}</li>
+                  
+                </ul>
+              ))}
+          </div>
+          <div>
+            {selectedBook && (
+              <ul>
+                <img src={selectedBook.previewUrl} />
+                <li>{selectedBook.title}</li>
+                <li>{selectedBook.author}</li>
               </ul>
-            ))}
-        </div>
-        <div>
-          {selectedBook && (
-            <ul>
-              <img src={selectedBook.previewUrl} style={{ height: '300px' }} />
-              <li>{selectedBook.title}</li>
-              <li>{selectedBook.author}</li>
-            </ul>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
       </div>
       <GoogleMap
         bookAddress={bookAddress[0]}
         selectedBook={selectedBook}
-        className='google-map'
+        className='google-map w-3/4'
         handleRequestBook={handleRequestBook}
         reqUsername={user.username}
       />
