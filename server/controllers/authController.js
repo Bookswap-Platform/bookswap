@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { User, Notification, Book } = require("../models/models");
 require("dotenv").config();
 
 const authControllers = {};
@@ -58,6 +59,20 @@ authControllers.verifyToken = (req, res, next) => {
       }
 
       console.log("decoded content in jwt.verify: ", decoded);
+
+      // find the user information from db and save to res.locals.user
+      User.findOne({ _id: decoded.userID })
+        .then((data) => {
+          res.locals.user = data;
+          console.log("currenst user: ", data);
+        })
+        .catch((err) => {
+          return next(
+            "Error in find user from db authControllers.verifyToken jwt.verify: " +
+              JSON.stringify(err)
+          );
+        });
+
       req.userID = decoded.id;
       res.locals.correctUser = true;
     });

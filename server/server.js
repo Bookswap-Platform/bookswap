@@ -21,7 +21,6 @@ app.use(cookieSession({
 
 const libraryRouter = require("./routes/library");
 const userController = require("./controllers/userController");
-const cookieController = require("./controllers/cookieController");
 const authController = require("./controllers/authController");
 
 app.get("/", (req, res) => {
@@ -35,8 +34,7 @@ app.post(
   authController.generateToken,
   authController.verifyToken,
   (req, res) => {
-    res.status(200).json(true);
-    // res.status(200).redirect('/home')
+    res.status(200).json(res.locals.correctUser);
   }
 );
 
@@ -61,7 +59,6 @@ app.post(
       "authentication completed, correctUser is ",
       res.locals.correctUser
     );
-    console.log("redirecting to home");
     res.json(res.locals.correctUser);
   }
 );
