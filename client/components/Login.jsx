@@ -80,7 +80,7 @@ const Login = () => {
 const inputClasses = 'rounded border-0 border-b-4 w-full h-12 bg-parchment'
 
   return (
-    <div className="form-container bg-parchment">
+    <div className="form-container flex justify-center items-center flex-col mx-auto w-1/2 h-dvh bg-parchment">
       <img src={BookSwapLogo} className="bookswap-logo" />
       <h3>Sign in to your account</h3>
       <form onSubmit={handleSubmit}>
