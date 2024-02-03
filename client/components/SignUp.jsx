@@ -5,7 +5,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import useOnClickOutside from "react-cool-onclickoutside";
-import BookSwapLogo from "../assets/images/BookSwap.png";
+import BookSwapLogo from "../assets/images/BookSwap_02.png";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const SignUp = () => {
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    callbackName: "GooglePlacesSetUp",
     requestOptions: {
       componentRestrictions: { country: "US" },
     },
@@ -138,88 +137,114 @@ const SignUp = () => {
       .catch((err) => console.log("App: create user error ", err));
   };
 
+
+  const inputStyles = 'rounded mb-4 border-0 border-b-4 w-full h-8 bg-parchment';
+  const labelStyles = '-mb-1';
+
+
   return (
-    <div className="form-container">
+    <div className="form-container bg-parchment w-10/12 mx-auto flex flex-col justify-center items-center min-h-dvh">
       <img src={BookSwapLogo} className="bookswap-logo" />
 
-      <h3>Sign up</h3>
-      <form onSubmit={handleSubmit}>
-        <div>First Name</div>
-        <div>
-          <input
-            name="name"
-            type="text"
-            value={userData.name}
-            onChange={handleUserDataChange}
-          />
+      <h3 className='m-0 font-bold my-6'>Sign up:</h3>
+      <form 
+        className='flex flex-col justify-center items-center w-full'
+        onSubmit={handleSubmit}>
+        
+        <div className='inputWrapper w-full flex justify-center'>
+
+        <div className='leftWrapper mr-16 w-1/3'>
+          <div className={labelStyles}>First Name:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="name"
+              type="text"
+              value={userData.name}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Last Name:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="lastName"
+              type="text"
+              value={userData.lastName}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Email:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="email"
+              type="email"
+              value={userData.email}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Address:</div>
+          <div ref={ref}>
+            <input
+              className={inputStyles}
+              id="address-input"
+              name="address"
+              value={value}
+              placeholder={userData.address}
+              onChange={handleAddressInput}
+              disabled={!ready}
+            />
+            {status === "OK" && <ul className="addressList shadow-lg">{renderSuggestions()}</ul>}
+          </div>
+        </div>
+        
+        <div className='rightWrapper w-1/3'>
+          
+
+          <div className={labelStyles}>Username:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="username"
+              type="text"
+              value={userData.username}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Password:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="password"
+              type="password"
+              value={userData.password}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Pick up instructions (Optional):</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="instructions"
+              type="text"
+              placeholder="e.g. pick up from doorman, or contact me at email / phone"
+              value={userData.instructions}
+              onChange={handleUserDataChange}
+            />
+          </div>
         </div>
 
-        <div>Last Name</div>
-        <div>
-          <input
-            name="lastName"
-            type="text"
-            value={userData.lastName}
-            onChange={handleUserDataChange}
-          />
-        </div>
-
-        <div>Email</div>
-        <div>
-          <input
-            name="email"
-            type="email"
-            value={userData.email}
-            onChange={handleUserDataChange}
-          />
-        </div>
-
-        <div>Address</div>
-        <div ref={ref}>
-          <input
-            id="address-input"
-            name="address"
-            value={value}
-            placeholder={userData.address}
-            onChange={handleAddressInput}
-            disabled={!ready}
-          />
-          {status === "OK" && <ul className="addressList">{renderSuggestions()}</ul>}
-        </div>
-
-        <div>Pick up instructions (Optional)</div>
-        <div>
-          <input
-            name="instructions"
-            type="text"
-            placeholder="e.g. pick up from doorman, or contact me at email / phone"
-            value={userData.instructions}
-            onChange={handleUserDataChange}
-          />
-        </div>
-
-        <div>Username</div>
-        <div>
-          <input
-            name="username"
-            type="text"
-            value={userData.username}
-            onChange={handleUserDataChange}
-          />
-        </div>
-
-        <div>Password</div>
-        <div>
-          <input
-            name="password"
-            type="password"
-            value={userData.password}
-            onChange={handleUserDataChange}
-          />
         </div>
 
         <button
           type="submit"
+          className='bg-darkGreen'
           disabled={
             !availability ||
             !userData.name ||
@@ -236,8 +261,8 @@ const SignUp = () => {
 
       {availability ? (
         <div
-          className="warning"
-          style={{ color: "#85BAA1", fontSize: "0.8em" }}
+          className="warning text-darkGreenHover text-sm"
+          
         >
           Username is available{" "}
         </div>
