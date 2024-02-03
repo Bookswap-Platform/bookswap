@@ -60,47 +60,59 @@ function HomeSearchBar() {
       .catch((err) => console.log('error requesting book: ', err));
   };
 
+  const borderStyle = searchBook ?  'border-2' : '';
+
   return (
-    <div className='home-container w-11/12 px-16 pt-20 h-dvh bg-parchment'>
-      <div>
-      <h1>Search for a book</h1>
-      <div className='search-container'>
-        <input
-          className='rounded border-0 border-b-4 w-64 h-12 bg-parchment'
-          type='text'
-          placeholder='Find book'
-          value={searchBook}
-          onChange={(e) => setSearchBook(e.target.value)}
-        />
-        <div className='rounded'>
-          {searchBook &&
-            filteredBooks.map((book, index) => (
-              <ul key={index} className={'pt-4 px-8 border-b-2 border-parchment bg-parchmentDark flex flex-col justify-center items-center'}>
-                <li>{book.title}</li>
-                <li className='italic'>{book.author}</li>
-                {/* <li>{book.genre}</li> */}
-                <li>{book.fullAddress}</li>
-                <button onClick={() => handleBookSelect(book)} className='w-3/5'>
-                  Show on map
-                </button>
-              </ul>
-            ))}
-        </div>
-        <div>
-          {selectedBook && (
-            <ul>
-              <img src={selectedBook.previewUrl} style={{ height: '300px' }} />
-              <li>{selectedBook.title}</li>
-              <li>{selectedBook.author}</li>
-            </ul>
-          )}
-        </div>
+    <div className='home-container w-11/12 px-16 pt-16 h-dvh bg-parchment box-border'>
+      <div className=''>
+
       </div>
+      <div className='w-1/3 h-4/5 flex flex-col'>
+        <div className='font-bold'>Search for a book</div>
+          <input 
+            className='rounded mt-0 border-0 border-b-4 h-12 w-full bg-parchment '
+            type='text'
+            placeholder='Find a book'
+            value={searchBook}
+            onChange={(e) => setSearchBook(e.target.value)}
+          />
+          <div className={'rounded mt-2 full overflow-y-auto ' + borderStyle +  ' border-solid border-parchmentDark'}>
+            {searchBook &&
+              filteredBooks.map((book, index) => (
+                <div 
+                  key={index} 
+                  onClick={() => handleBookSelect(book)}
+                  className={'p-3 border-1 outline-1 border-b-darkGreen border-b-2 bg-parchment hover:cursor-pointer hover:bg-parchmentDark flex items-center'}>
+                  
+                  <img 
+                    className='rounded object-cover w-20 mr-8' 
+                    src={book.previewUrl} 
+                    />
+                  <div className=''>
+
+                    <div className={'font-bold text-lg mt-2'}>{book.title}</div>
+                    <div className='italic text-sm'>{book.author}</div>
+                    {/* <li>{book.genre}</li> */}
+                    <div>{book.fullAddress}</div>
+                  </div>
+                  
+                </div>
+              ))}
+          </div>
+          <div>
+            {selectedBook && (
+              <ul>
+                <img src={selectedBook.previewUrl} />
+                <li>{selectedBook.title}</li>
+                <li>{selectedBook.author}</li>
+              </ul>
+            )}
+          </div>
       </div>
       <GoogleMap
         bookAddress={bookAddress[0]}
         selectedBook={selectedBook}
-        className='google-map'
+        className='google-map w-5/6 h-dvh'
         handleRequestBook={handleRequestBook}
         reqUsername={user.username}
       />
