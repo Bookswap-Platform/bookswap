@@ -3,7 +3,7 @@ const express = require('express');
 const libraryController = require('../controllers/libraryController');
 const userController = require('../controllers/userController');
 const apiController = require('../controllers/apiController');
-const sessionController = require('../controllers/sessionController');
+const authController = require("../controllers/authController");
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ router.post(
 );
 
 router.post(
-  '/action/addBook/',
+  "/action/addBook/",
   libraryController.addToGlobalLibrary,
-  sessionController.isLoggedIn,
+  authController.verifyToken,
   userController.addToUserLibrary,
   (req, res) => res.status(200).json(res.locals.user.books)
 );
@@ -41,8 +41,8 @@ router.post(
 );
 
 router.delete(
-  '/action/deleteBook',
-  sessionController.isLoggedIn,
+  "/action/deleteBook",
+  authController.verifyToken,
   libraryController.retrieveBook,
   libraryController.deleteBook,
   (req, res) => {
@@ -51,8 +51,8 @@ router.delete(
 );
 
 router.delete(
-  '/action/deleteBook',
-  sessionController.isLoggedIn,
+  "/action/deleteBook",
+  authController.verifyToken,
   libraryController.retrieveBook,
   libraryController.deleteBook,
   (req, res) => {
@@ -70,8 +70,8 @@ router.post(
 );
 
 router.post(
-  '/action/approveSwapRequest',
-  sessionController.isLoggedIn,
+  "/action/approveSwapRequest",
+  authController.verifyToken,
   userController.approveSwapRequest,
   (req, res) => {
     res.status(200).json(res.locals.user);
@@ -79,8 +79,8 @@ router.post(
 );
 
 router.post(
-  '/action/rejectSwapRequest',
-  sessionController.isLoggedIn,
+  "/action/rejectSwapRequest",
+  authController.verifyToken,
   userController.rejectSwapRequest,
   (req, res) => {
     res.status(200).json(res.locals.user);
@@ -88,8 +88,8 @@ router.post(
 );
 
 router.post(
-  '/action/withdrawRequest',
-  sessionController.isLoggedIn,
+  "/action/withdrawRequest",
+  authController.verifyToken,
   userController.withdrawRequest,
   (req, res) => {
     res.status(200).json(res.locals.user);

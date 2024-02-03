@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { OAuth2Client } = require("google-auth-library");
 const { User, Notification, Book } = require("../models/models");
-const { findOne } = require("../models/sessionModel");
+
 
 const userController = {};
 const client = new OAuth2Client();
@@ -38,17 +38,17 @@ userController.createUser = (req, res, next) => {
 
       return next();
     })
-    .catch((error) => {next(error)});
+    .catch((error) => {
+      next(error);
+    });
 };
-
 
 //Checking if username already exists during signup
 userController.checkUser = (req, res, next) => {
   console.log("userController checkuser running");
   const { username } = req.params;
   console.log("username is ", username);
-  User.findOne({ username })
-  .then((data) => {
+  User.findOne({ username }).then((data) => {
     console.log("data is, ", data);
     if (data === null) {
       res.locals.userAvailability = true;
@@ -73,11 +73,11 @@ userController.verifyOAuth = async function (req, res, next) {
     const lastName = payload.family_name;
     const email = payload.email;
     res.locals.user = res.locals.user || {};
-    res.locals.user = { 
-      name, 
-      lastName, 
-      email, 
-      userID 
+    res.locals.user = {
+      name,
+      lastName,
+      email,
+      userID,
     };
     console.log(">>> current user data from google login: ", res.locals.user);
     return next();
@@ -85,7 +85,7 @@ userController.verifyOAuth = async function (req, res, next) {
     return next({
       log: "userController.verifyOAuth Error",
       status: 400,
-      message: { err: `verify Oauth Error, ${err}`},
+      message: { err: `verify Oauth Error, ${err}` },
     });
   }
 };
@@ -94,7 +94,10 @@ userController.newUserFromGoogleOauth = async (req, res, next) => {
   const verifyNewUserfromGoogleOauth = await User.findOne({
     email: res.locals.user.email,
   });
-  console.log(">>> the user id from the email search in db: ", verifyNewUserfromGoogleOauth);
+  console.log(
+    ">>> the user id from the email search in db: ",
+    verifyNewUserfromGoogleOauth
+  );
 
   if (verifyNewUserfromGoogleOauth) {
     res.locals.userID = verifyNewUserfromGoogleOauth._id.toString();
@@ -201,17 +204,19 @@ userController.updateUserProfile = async (req, res, next) => {
 
 userController.addToUserLibrary = async (req, res, next) => {
   try {
-  // const userId = res.locals.user._id;
-  // const { username } = req.params;
-  const user = await User.findOne({ username: res.locals.user.username });
-  // const user = await User.findOne({ username });
-  const book = res.locals.book;
-  // const bookId = res.locals.book._id;
-  // const currentBooks = res.locals.user.books;
-  const currentBooks = [...user.books];
-  // currentBooks.push([{ book: bookId }, { isAvailable: true }]);
-  currentBooks.push({ book });
- 
+    console.log(">>> add to userlibrary for user: ", res.locals.user);
+    const userId = res.locals.user._id;
+    // const userId = res.locals.user._id;
+    // const { username } = req.params;
+    const user = await User.findOne({ username: res.locals.user.username });
+    // const user = await User.findOne({ username });
+    const book = res.locals.book;
+    // const bookId = res.locals.book._id;
+    // const currentBooks = res.locals.user.books;
+    const currentBooks = [...user.books];
+    // currentBooks.push([{ book: bookId }, { isAvailable: true }]);
+    currentBooks.push({ book });
+
     if (!user.books.findIndex((el) => el.book.title === book.title)) {
       console.log("Book Exists in User Library!");
       res.locals.user = user;

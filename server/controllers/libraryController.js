@@ -31,18 +31,9 @@ libraryController.getUserLibrary = async (req, res, next) => {
   }
 };
 
-// libraryController.checkApi = async (req, res, next) => {
-//   // try {
-//   //   if (res.locals.title) {
-
-//   //   }
-//   // } catch (error) {
-
-//   // }
-// };
-
 libraryController.addToGlobalLibrary = async (req, res, next) => {
   try {
+    console.log(">> here is req.body in libraryController.addToGlobalLibrary: ", req.body);
     const { title, author, olId, previewUrl } = req.body;
     const checkBook = await Book.findOne({ olId });
     if (checkBook) {
@@ -58,6 +49,7 @@ libraryController.addToGlobalLibrary = async (req, res, next) => {
     return next(error);
   }
 };
+
 
 libraryController.deleteBook = async (req, res, next) => {
   const { title } = req.body;
