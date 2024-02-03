@@ -1,176 +1,284 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import BookSwapLogo from '../assets/images/BookSwap.png';
-
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import useOnClickOutside from "react-cool-onclickoutside";
+import BookSwapLogo from "../assets/images/BookSwap_02.png";
 
 const SignUp = () => {
-    // const [newUsername, setNewUsername] = useState('');
-    const navigate = useNavigate();
-    const [availability, setAvailability] = useState(true);
-    const [userData, setUserData] = useState({
-        username: '',
-        password: '',
-        name: '',
-        address: '',
-        instructions: '',
-        // zipcode: '',
-    })
+  const navigate = useNavigate();
+  const [availability, setAvailability] = useState(true);
+  const [userData, setUserData] = useState({
+    username: "",
+    password: "",
+    name: "",
+    lastName: "",
+    email: "",
+    address: "",
+    instructions: "",
+  });
 
-    useEffect(() => {
-        fetch('/action/getMapsKey')
-            .then(res => res.json())
-            .then((key) => {
-                const script = document.createElement('script');
-                script.id = 'google'
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places`;
-                script.async = true;
-                document.head.appendChild(script);
-            })
-            .catch(err => console.log('App: Error retrieving maps key ', err))
+  const {
+    ready,
+    value,
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "US" },
+    },
+    debounce: 300,
+  });
 
-        return () => {
-            const removedScript = document.getElementById('google');
-            if (removedScript) document.head.removeChild(removedScript);
-        }
-    }, []);
+  const ref = useOnClickOutside(() => {
+    clearSuggestions();
+  });
 
+  const handleAddressInput = (e) => {
+    setValue(e.target.value);
+  };
 
-    useEffect(() => {
-        if (userData.username) {
-            fetch(`/action/check/${userData.username}`)
-                .then(res => res.json())
-                .then(bool => {
-                    setAvailability(bool)
-                })
-                .catch(err => console.log('App: check username availability error:', err));
-        } else {
-            // if input is empty
-            setAvailability(true);
-        };
+  const handleAddressSelect =
+    ({ description }) =>
+    () => {
+      setValue(description, false);
+      setUserData({
+        ...userData,
+        address: description,
+      });
+      clearSuggestions();
 
-        const GooglePlacesSetUp = () => {
-            if (window.google) {
-                const autocomplete = new window.google.maps.places.Autocomplete(
-                    document.getElementById('address-input'),
-                    { types: ['address'] }
-                );
-                autocomplete.addListener('place_changed', () => {
-                    const place = autocomplete.getPlace();
-                    if (place.formatted_address) {
-                        setUserData({
-                            ...userData,
-                            address: place.formatted_address
-                        })
-                    }
-                })
-            }
-        }
-        GooglePlacesSetUp();
-    }, [userData]);
+      // get latitude and longitude via utility functions
+      getGeocode({ address: description }).then((results) => {
+        const { lat, lng } = getLatLng(results[0]);
+        console.log(">>> Current Coordinates: ", { lat, lng });
+      });
+    };
 
+  const suggestion_items = {
+    cursor: "pointer",
+    padding: "10px",
+    margin: "5px",
+    transition: "background-color 0.3s ease",
+    top: "100%",
+    left: 0,
+    maxHeight: "200px",
+  };
 
-    // const handleUsernameChange = (e) => setNewUsername(e.target.value);
-    const handleUserDataChange = (e) => {
-        setUserData({
-            ...userData,
-            [e.target.name]: e.target.value
-        });
-    }
+  const renderSuggestions = () =>
+    data.map((suggestion) => {
+      const {
+        place_id,
+        structured_formatting: { main_text, secondary_text },
+      } = suggestion;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const data = {
-            name: userData.name,
-            address: userData.address,
-            username: userData.username,
-            password: userData.password,
-            instructions: userData.instructions
-        };
-        fetch('/action/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+      return (
+        <li
+          key={place_id}
+          style={suggestion_items}
+          onClick={handleAddressSelect(suggestion)}
+          className="addressSuggestion"
+        >
+          <strong>{main_text}</strong> <small>{secondary_text}</small>
+        </li>
+      );
+    });
+
+  useEffect(() => {
+    if (userData.username) {
+      fetch(`/action/check/${userData.username}`)
+        .then((res) => res.json())
+        .then((bool) => {
+          setAvailability(bool);
         })
-            .then(res => res.json())
-            .then(bool => {
-                if (bool) {
-                    navigate('/home');
-                }
-            })
-            .catch(err => console.log("App: create user error ", err));
+        .catch((err) =>
+          console.log("App: check username availability error:", err)
+        );
+    } else {
+      // if input is empty
+      setAvailability(true);
     }
+  }, [userData]);
 
-    return (
-        <div className="form-container">
-            <img src={BookSwapLogo} className='bookswap-logo' />
+  const handleUserDataChange = (e) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-            <h3>Sign up</h3>
-            <form onSubmit={handleSubmit}>
-                <div>Name</div>
-                <div><input
-                    name="name"
-                    type="text"
-                    value={userData.name}
-                    onChange={handleUserDataChange} /></div>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      name: userData.name,
+      lastName: userData.lastName,
+      address: userData.address,
+      email: userData.email,
+      username: userData.username,
+      password: userData.password,
+      instructions: userData.instructions,
+    };
+    fetch("/action/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((bool) => {
+        if (bool) {
+          navigate("/home");
+        }
+      })
+      .catch((err) => console.log("App: create user error ", err));
+  };
 
-                <div>Address</div>
-                <div><input
-                    id="address-input"
-                    name="address"
-                    type="text"
-                    value={userData.address}
-                    onChange={handleUserDataChange} /></div>
 
-                {/* <div>ZIP Code</div>
-                <div><input
-                    name="zipcode"
-                    type="text"
-                    value={userData.zipcode}
-                    onChange={handleUserDataChange} /></div> */}
+  const inputStyles = 'rounded mb-4 border-0 border-b-4 w-full h-8 bg-parchment';
+  const labelStyles = '-mb-1';
 
-                <div>Pick up instructions (Optional)</div>
-                <div><input
-                    name="instructions"
-                    type="text"
-                    placeholder="e.g. pick up from doorman, or contact me at email / phone"
-                    value={userData.instructions}
-                    onChange={handleUserDataChange}
-                /></div>
 
-                <div>Username</div>
-                <div><input
-                    name="username"
-                    type="text"
-                    value={userData.username}
-                    onChange={handleUserDataChange}
-                /></div>
+  return (
+    <div className="form-container bg-parchment w-10/12 mx-auto flex flex-col justify-center items-center min-h-dvh">
+      <img src={BookSwapLogo} className="bookswap-logo" />
 
-                <div>Password</div>
-                <div><input
-                    name="password"
-                    type="password"
-                    value={userData.password}
-                    onChange={handleUserDataChange} /></div>
+      <h3 className='m-0 font-bold my-6'>Sign up:</h3>
+      <form 
+        className='flex flex-col justify-center items-center w-full'
+        onSubmit={handleSubmit}>
+        
+        <div className='inputWrapper w-full flex justify-center'>
 
-                <button type="submit"
-                    disabled={
-                        !availability ||
-                        !userData.name ||
-                        !userData.address ||
-                        // !userData.zipcode ||
-                        !userData.username ||
-                        !userData.password
-                    }>Create user</button>
-            </form>
-            {availability ?
-                <div class="warning" style={{ color: "#85BAA1", fontSize: "0.8em" }}>Username is available </div> :
-                <div class="warning" style={{ color: "#A41409", fontSize: "0.8em" }}>Username is not available</div>
-            }
-            <div>Already a user? <a href="/">Sign in</a></div>
+        <div className='leftWrapper mr-16 w-1/3'>
+          <div className={labelStyles}>First Name:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="name"
+              type="text"
+              value={userData.name}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Last Name:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="lastName"
+              type="text"
+              value={userData.lastName}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Email:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="email"
+              type="email"
+              value={userData.email}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Address:</div>
+          <div ref={ref}>
+            <input
+              className={inputStyles}
+              id="address-input"
+              name="address"
+              value={value}
+              placeholder={userData.address}
+              onChange={handleAddressInput}
+              disabled={!ready}
+            />
+            {status === "OK" && <ul className="addressList shadow-lg">{renderSuggestions()}</ul>}
+          </div>
         </div>
-    )
-}
+        
+        <div className='rightWrapper w-1/3'>
+          
+
+          <div className={labelStyles}>Username:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="username"
+              type="text"
+              value={userData.username}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Password:</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="password"
+              type="password"
+              value={userData.password}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className={labelStyles}>Pick up instructions (Optional):</div>
+          <div>
+            <input
+              className={inputStyles}
+              name="instructions"
+              type="text"
+              placeholder="e.g. pick up from doorman, or contact me at email / phone"
+              value={userData.instructions}
+              onChange={handleUserDataChange}
+            />
+          </div>
+        </div>
+
+        </div>
+
+        <button
+          type="submit"
+          className='bg-darkGreen'
+          disabled={
+            !availability ||
+            !userData.name ||
+            !userData.lastName ||
+            !userData.email ||
+            !userData.address ||
+            !userData.username ||
+            !userData.password
+          }
+        >
+          Create user
+        </button>
+      </form>
+
+      {availability ? (
+        <div
+          className="warning text-darkGreenHover text-sm"
+          
+        >
+          Username is available{" "}
+        </div>
+      ) : (
+        <div
+          className="warning"
+          style={{ color: "#A41409", fontSize: "0.8em" }}
+        >
+          Username is not available
+        </div>
+      )}
+      <div>
+        Already a user? <a href="/">Sign in</a>
+      </div>
+    </div>
+  );
+};
 
 export default SignUp;

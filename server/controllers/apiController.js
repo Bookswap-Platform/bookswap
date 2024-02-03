@@ -7,11 +7,21 @@ apiController.checkApi = async (req, res, next) => {
     try {
         if (res.locals.title){
             const bookTitle = res.locals.title.replaceAll(' ', '+');
-            const response = await fetch('https://openlibrary.org/search.json?title=' + bookTitle);
+            const response = await fetch(`https://openlibrary.org/search.json?title=${bookTitle}&limit=5`);  
             const data = await response.json();
-            const olId = data.docs[0].key.slice(7);
-            const previewUrl = `https://covers.openlibrary.org/b/olid/${data.docs[0].cover_edition_key}-M.jpg`
-            res.locals.bookData = {olId, title : data.docs[0].title, author : data.docs[0].author_name[0], previewUrl, genre:data.docs[0].subject};
+
+            const bookData = data.docs.slice(0, 5).map((doc) => ({
+              olId: doc.key.slice(7),
+              title: doc.title,
+              author: doc.author_name ? doc.author_name[0] : "Unknown Author",
+              previewUrl: doc.cover_edition_key
+                ? `https://covers.openlibrary.org/b/olid/${doc.cover_edition_key}-M.jpg`
+                : "",
+                genre: doc.subject ? doc.subject:[]
+            }));
+
+            console.log(">>> searched books: ", bookData);
+            res.locals.bookData = bookData;
             console.log(res.locals.bookData);
             return next();
         }
@@ -22,16 +32,5 @@ apiController.checkApi = async (req, res, next) => {
         console.log ('Error in apiController fetch request', error)
     }
 }
-
-// apiController.addToGlobalLibrary = async (req, res, next) => {
-//     try {
-//         const olWorkNumber = req.body;
-//         const response = await fetch('https://openlibrary.org/works/' + olWorkNumber + '.json');
-//         const data = await response.json();
-        
-//     } catch (error) {
-//         console.log('Error in addToGlobalLibrary middleware', error)
-//     }
-// }
 
 module.exports = apiController;

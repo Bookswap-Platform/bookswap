@@ -11,7 +11,7 @@ import Book from '../assets/images/Book.png';
 function GoogleMap({bookAddress, handleRequestBook, reqUsername }) {
   const [position, setPosition] = useState({ lat: 34.0522, lng: -118.2437 });
   const [openInfoWindow, setOpenInfoWindow] = useState(false);
-  const apiKey = 'AIzaSyDOh5A62p9bxdJ0MnHwHhzKO3McjKdAqCA';
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
     if (bookAddress && bookAddress.address) {
@@ -38,7 +38,7 @@ function GoogleMap({bookAddress, handleRequestBook, reqUsername }) {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div style={{ height: '70vh', width: '70%' }}>
+      <div className="h-5/6 w-3/5">
         <Map zoom={9} center={position} mapId={'49e4b9ad955c530'}>
           {bookAddress && (
             <AdvancedMarker

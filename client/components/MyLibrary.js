@@ -33,14 +33,26 @@ const MyLibrary = () => {
   }
 
   return (
-    <div>
+    <div >
       <HomeNavBar />
       {/* <MyBooks books={myLibraryBooks} /> */}
-      <h1>You currently have {myLibraryBooks.length > 1 ? `${myLibraryBooks.length} books` : `${myLibraryBooks.length} book`}.</h1>
-      {myLibraryBooks.length > 0 ? <MyBooks books={myLibraryBooks} deleteBook={deleteBook} /> : <div>No books yet.</div>}
-      
-      <h1>Add more books</h1>
-      <AddBook updateBooks={(data) => setMyLibraryBooks(data)}/>
+      <div className='flex justify-center items-start w-11/12 min-h-dvh bg-parchment mx-auto pt-20 px-2'>
+        
+      <div className='flex flex-col justify-center items-center w-1/2 mr-8'>
+          <h1 className='font-bold'>Add more books</h1>
+          <AddBook updateBooks={(data) => setMyLibraryBooks(data)}/>
+        </div>
+
+        <div className='flex flex-col justify-center items-center'>
+          <h1
+            className='mb-12 font-bold'
+          >You currently have {myLibraryBooks.length > 1 ? `${myLibraryBooks.length} books` : `${myLibraryBooks.length} book`}.</h1>
+
+          {myLibraryBooks.length > 0 ? <MyBooks books={myLibraryBooks} deleteBook={deleteBook} /> : <div>No books yet.</div>}
+        </div>
+
+        
+      </div>
 
     </div>
   );

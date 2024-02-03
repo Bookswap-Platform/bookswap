@@ -1,6 +1,7 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
+
 
 .home-navbar {
   display: flex;
@@ -36,8 +37,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 20px;
-  margin-top: 50px;
+  /* padding: 20px;
+  margin-top: 50px; */
 }
 
 .search-container {
@@ -72,6 +73,11 @@ input {
   height: 25px;
 }
 
+input:focus {
+  background-color: #fff;
+  outline: transparent;
+}
+
 .modal-close-button {
   margin-top: 10px;
   cursor: pointer;
@@ -85,14 +91,14 @@ button {
   border-radius: 5px;
   width: 365px;
   height: 40px;
-  background-color: rgb(92, 43, 226);
+  background-color: #333D2E;
   color: white;
   font-weight: bold;
   font-size: 12pt;
 }
 
 button:hover {
-  background-color: rgb(123, 87, 223);
+  background-color: #5f6d59;
 }
 
 button:disabled {
@@ -122,21 +128,21 @@ button.transparent:hover {
 a {
   font-weight: bold;
   text-decoration: none;
-  color: rgb(92, 43, 226);
+  color: #333D2E;
 }
 
 a:hover {
-  color: rgb(123, 87, 223);
+  color: #434f3e;
 }
 
-.form-container {
+/* .form-container {
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
   height: 100vh;
   margin: 0;
-}
+} */
 
 .warning {
   margin-bottom: 20px;
@@ -184,10 +190,20 @@ h1 {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 685px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 ul {
   list-style: none;
+}
+
+.addressList {
+  position: absolute;
+  background-color: #F4F2E9 ;
+  border-radius: 8px;
+
+}
+
+.addressSuggestion:hover{
+  background-color: #e2ddc7 ;
 }
