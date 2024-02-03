@@ -3,6 +3,7 @@ const path = require("path");
 const PORT = 3000;
 const app = express();
 const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 require("dotenv").config();
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -10,11 +11,17 @@ const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 app.use(express.json());
 app.use(cookieParser());
 
-const libraryRouter = require("./routes/library");
+// Store session data on the client within a cookie without requiring database
+app.use(cookieSession({
+  name: "whiskr-session",
+  keys: ["secretekeyinsession"],
+  httpOnly: true
+}));
 
+
+const libraryRouter = require("./routes/library");
 const userController = require("./controllers/userController");
-const cookieController = require("./controllers/cookieController");
-const sessionController = require("./controllers/sessionController");
+const authController = require("./controllers/authController");
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/index.html"));
@@ -24,11 +31,10 @@ app.get("/", (req, res) => {
 app.post(
   "/action/signup",
   userController.createUser,
-  cookieController.setSSIDCookie,
-  sessionController.startSession,
+  authController.generateToken,
+  authController.verifyToken,
   (req, res) => {
-    res.status(200).json(true);
-    // res.status(200).redirect('/home')
+    res.status(200).json(res.locals.correctUser);
   }
 );
 
@@ -46,20 +52,14 @@ app.get("/action/check/:username", userController.checkUser, (req, res) => {
 app.post(
   "/action/login",
   userController.verifyUser,
-  cookieController.setSSIDCookie,
-  sessionController.startSession,
+  authController.generateToken,
+  authController.verifyToken,
   (req, res) => {
     console.log(
       "authentication completed, correctUser is ",
       res.locals.correctUser
     );
-    console.log("redirecting to home");
     res.json(res.locals.correctUser);
-    // res.status(200).redirect('/home')
-    // }
-    // else {
-    //     res.json(res.locals.correctUser)
-    // }
   }
 );
 
@@ -67,53 +67,47 @@ app.post(
   "/action/oAuth",
   userController.verifyOAuth,
   userController.newUserFromGoogleOauth,
-  cookieController.setSSIDCookie,
-  sessionController.startSession,
+  authController.generateToken,
   (req, res) => {
-    // console.log("Google OAuth token verified. userData: ", res.locals.user);
     res.status(200).json(res.locals.correctUser);
   }
 );
 
 //Protect server side requests to protected pages
-app.get("/home", sessionController.isLoggedIn, (req, res) => {
+app.get("/home", authController.verifyToken, (req, res) => {
   res.status(200).json(res.locals.user);
 });
 
-app.get("/myLibrary", sessionController.isLoggedIn, (req, res) => {
+app.get("/myLibrary", authController.verifyToken, (req, res) => {
   res.status(200).json(res.locals.user);
 });
 
-app.get("/action/getUser", sessionController.isLoggedIn, (req, res) => {
+app.get("/action/getUser", authController.verifyToken, (req, res) => {
   res.status(200).json(res.locals.user);
 });
 
 app.post(
   "/action/updateUser",
-  sessionController.isLoggedIn,
+  authController.verifyToken,
   userController.updateUserProfile,
   (req, res) => {
     res.status(200).json(res.locals.user);
   }
 );
 
-app.get("/action/getLibrary", sessionController.isLoggedIn, (req, res) => {
+app.get("/action/getLibrary", authController.verifyToken, (req, res) => {
   console.log("get library running");
   res.status(200).json(res.locals.user.books);
 });
 
-app.get(
-  "/action/getNotifications",
-  sessionController.isLoggedIn,
-  (req, res) => {
-    console.log("get notifications running");
-    res.status(200).json(res.locals.user.notifications);
-  }
-);
+app.get("/action/getNotifications", authController.verifyToken, (req, res) => {
+  console.log("get notifications running: ", res.locals.user.notifications);
+  res.status(200).json(res.locals.user.notifications);
+});
 
 app.get(
   "/action/markAsRead/:id",
-  sessionController.isLoggedIn,
+  authController.verifyToken,
   userController.markReadNotification,
   (req, res) => {
     res.status(200).json(res.locals.user.notifications);
@@ -122,7 +116,7 @@ app.get(
 
 app.get(
   "/action/clearNotifications",
-  sessionController.isLoggedIn,
+  authController.verifyToken,
   userController.clearNotifications,
   (req, res) => {
     res.status(200).json(res.locals.user.notifications);
@@ -130,13 +124,13 @@ app.get(
 );
 
 //Verify active session for client side requests to protected pages
-app.get("/action/auth", sessionController.isLoggedIn, (req, res) => {
-  res.status(200).json(true);
+app.get("/action/auth", authController.verifyToken, (req, res) => {
+  res.status(200).json(res.locals.correctUser);
 });
 
 //Logout
-app.get("/action/logout", sessionController.endSession, (req, res) => {
-  res.clearCookie("ssid");
+app.get("/action/logout", (req, res) => {
+  res.clearCookie("token");
   res.redirect("/");
 });
 

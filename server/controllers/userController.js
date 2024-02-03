@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { OAuth2Client } = require("google-auth-library");
 const { User, Notification, Book } = require("../models/models");
-const { findOne } = require("../models/sessionModel");
+
 
 const userController = {};
 const client = new OAuth2Client();
@@ -17,7 +17,7 @@ userController.createUser = (req, res, next) => {
     return res.status(400).json({ error: "All fields are required" });
   }
 
-  User.create({
+  return User.create({
     username,
     password,
     name,
@@ -38,12 +38,8 @@ userController.createUser = (req, res, next) => {
 
       return next();
     })
-    .catch((err) => {
-      return next({
-        log: "Create User Error",
-        status: 400,
-        message: { err: "Create User Error" },
-      });
+    .catch((error) => {
+      next(error);
     });
 };
 
@@ -71,20 +67,25 @@ userController.verifyOAuth = async function (req, res, next) {
       idToken: req.body.credential,
       audience: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
     });
-    const payload = await ticket.getPayload();
+    const payload = ticket.getPayload();
     const userID = payload.sub;
     const name = payload.given_name;
     const lastName = payload.family_name;
     const email = payload.email;
-    const userData = { name, lastName, email, userID };
-    res.locals.user = userData;
+    res.locals.user = res.locals.user || {};
+    res.locals.user = {
+      name,
+      lastName,
+      email,
+      userID,
+    };
     console.log(">>> current user data from google login: ", res.locals.user);
     return next();
   } catch (err) {
     return next({
       log: "userController.verifyOAuth Error",
       status: 400,
-      message: { err: "verify Oauth Error" },
+      message: { err: `verify Oauth Error, ${err}` },
     });
   }
 };
@@ -93,7 +94,10 @@ userController.newUserFromGoogleOauth = async (req, res, next) => {
   const verifyNewUserfromGoogleOauth = await User.findOne({
     email: res.locals.user.email,
   });
-  console.log(">>> the user id from the email search in db: ", verifyNewUserfromGoogleOauth._id);
+  console.log(
+    ">>> the user id from the email search in db: ",
+    verifyNewUserfromGoogleOauth
+  );
 
   if (verifyNewUserfromGoogleOauth) {
     res.locals.userID = verifyNewUserfromGoogleOauth._id.toString();
@@ -159,7 +163,6 @@ userController.verifyUser = (req, res, next) => {
           );
           return next();
         } else {
-          console.log("wrong password");
           return res.json(false);
           // res.locals.correctUser = false;
           // return next();
@@ -200,17 +203,20 @@ userController.updateUserProfile = async (req, res, next) => {
 };
 
 userController.addToUserLibrary = async (req, res, next) => {
-  const userId = res.locals.user._id;
-  // const { username } = req.params;
-  const user = await User.findOne({ username: res.locals.user.username });
-  // const user = await User.findOne({ username });
-  const book = res.locals.book;
-  // const bookId = res.locals.book._id;
-  // const currentBooks = res.locals.user.books;
-  const currentBooks = [...user.books];
-  // currentBooks.push([{ book: bookId }, { isAvailable: true }]);
-  currentBooks.push({ book });
   try {
+    console.log(">>> add to userlibrary for user: ", res.locals.user);
+    const userId = res.locals.user._id;
+    // const userId = res.locals.user._id;
+    // const { username } = req.params;
+    const user = await User.findOne({ username: res.locals.user.username });
+    // const user = await User.findOne({ username });
+    const book = res.locals.book;
+    // const bookId = res.locals.book._id;
+    // const currentBooks = res.locals.user.books;
+    const currentBooks = [...user.books];
+    // currentBooks.push([{ book: bookId }, { isAvailable: true }]);
+    currentBooks.push({ book });
+
     if (!user.books.findIndex((el) => el.book.title === book.title)) {
       console.log("Book Exists in User Library!");
       res.locals.user = user;
@@ -234,6 +240,7 @@ userController.addToUserLibrary = async (req, res, next) => {
     return next();
   } catch (err) {
     console.log("Error in userController.addToUserLibrary: ", err);
+    return next(err);
   }
 };
 
@@ -244,7 +251,6 @@ userController.sendSwapRequest = async (req, res, next) => {
   );
 
   const user = await User.findOne({ username: reqUsername });
-  console.log(user.username);
   // const outgoingRequests = res.locals.user.outgoingRequests;
   let outgoingRequests = user.outgoingRequests;
   console.log("outgoingRequests firstly is ", outgoingRequests);
